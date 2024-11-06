@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             ChatterPlayTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     this.chatroom = Chatroom(Modifier.padding(innerPadding))
-                    this.chatroom!!.RenderMessages()
+                    this.chatroom!!.Render()
                 }
             }
         }

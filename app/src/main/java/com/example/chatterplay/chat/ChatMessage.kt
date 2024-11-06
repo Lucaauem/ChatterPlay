@@ -15,10 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 class ChatMessage(sender: String, content: String) {
-    var sender = sender
-        private set
-    var content = content
-        private set
+    private var sender = sender
+    private var content = content
+
+    fun isOwnMessage(userName: String) : Boolean {
+        return this.sender == userName
+    }
 
     @Composable
     fun ShowMessage(modifier: Modifier, isOwnMessage: Boolean) {
