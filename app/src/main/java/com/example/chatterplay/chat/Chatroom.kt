@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 
-class Chatroom(private val modifier: Modifier) {
+class Chatroom(private val id: String) {
     private var name = ""
     private var users = ArrayList<String>()
     private val messages = ArrayList<ChatMessage>()
@@ -63,9 +63,8 @@ class Chatroom(private val modifier: Modifier) {
     }
 
     @Composable
-    fun Render() {
+    fun Render(modifier: Modifier) {
         val messages = this.messages
-        val modifier = this.modifier
         val chatroomName = this.name
         val memberCount = this.users.count()
 
