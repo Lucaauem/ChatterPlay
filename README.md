@@ -1,4 +1,4 @@
-# ChaterPlay – Readme
+# ChatterPlay
 
 ## Team Members
 - Luca Außem [3576632] (Lead)
