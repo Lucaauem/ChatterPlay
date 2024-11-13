@@ -1,23 +1,43 @@
 package com.example.chatterplay
 
 import com.example.chatterplay.chat.Chatroom
+import com.example.chatterplay.user.User
 
-class UserSession {
-    var chats = HashMap<String, Chatroom>()
-        private set
-    var currentChat: Chatroom? = null
-        private set
+class UserSession private constructor() {
+    companion object {
+        private var instance: UserSession? = null
 
-    fun start() {
-        this.loadRooms()
+        fun getInstance() : UserSession {
+            if (instance == null) {
+                instance = UserSession()
+            }
+            return instance as UserSession
+        }
     }
 
-    private fun loadRooms() {
+    var user: User? = null
+        private set
+    var currentChat : Chatroom? = null
+        private set
+    var chats = HashMap<String, Chatroom>()
+        private set
+
+    fun init() {
+        this.loadChatRooms()
+    }
+
+    fun logIn(user: User) {
+        this.user = user
+    }
+
+    fun isLoggedIn() : Boolean {
+        return this.user != null
+    }
+
+    private fun loadChatRooms() {
         // !TODO! Get chats via userId from db
-        val d_CHAT_ID = "cr_12345"
-        val d_CHAT_ID_2 = "cr_12346"
-        this.chats[d_CHAT_ID] = Chatroom(d_CHAT_ID)
-        this.chats[d_CHAT_ID_2] = Chatroom(d_CHAT_ID_2)
+        this.chats["cr_12345"] = Chatroom()
+        this.chats["cr_12346"] = Chatroom()
     }
 
     fun joinChat(id: String) {
