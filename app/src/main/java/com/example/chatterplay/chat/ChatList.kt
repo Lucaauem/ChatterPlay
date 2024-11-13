@@ -42,7 +42,6 @@ class ChatList : ComponentActivity() {
 
     @Composable
     fun LoadChats() {
-
         val chatIds: Array<String> = this.session.chats.keys.toTypedArray()
 
         LazyVerticalGrid(columns = GridCells.Fixed(1)) {
@@ -56,7 +55,6 @@ class ChatList : ComponentActivity() {
     private fun LoadChat(id: String) {
         val session = this.session
 
-        // !TODO! Button to join chat
         Button(onClick = {
             session.joinChat(id)
             val intent = Intent(this, ChatActivity::class.java)

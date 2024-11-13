@@ -15,8 +15,8 @@ class ChatActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //val chatroomId = savedInstanceState?.getString("chatId")
-        val chatroom = Chatroom("1234")
+        val chatroomId = savedInstanceState!!.getString("chatId").toString()
+        val chatroom = Chatroom(chatroomId)
 
         enableEdgeToEdge()
         setContent {
