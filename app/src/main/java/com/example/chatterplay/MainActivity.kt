@@ -12,8 +12,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.chatterplay.chat.ChatList
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
+import com.example.chatterplay.user.User
+import kotlin.system.exitProcess
 
 class MainActivity : ComponentActivity() {
+    override fun onStart() {
+        super.onStart()
+
+        // !TODO! User login
+        val session = UserSession.getInstance()
+        session.logIn(User(1))
+        if(!session.isLoggedIn()) {
+            exitProcess(0)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

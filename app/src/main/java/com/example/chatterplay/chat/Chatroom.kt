@@ -26,10 +26,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.example.chatterplay.UserSession
+import com.example.chatterplay.user.User
 
-class Chatroom(private val id: String) {
+class Chatroom {
     private var name = ""
-    private var users = ArrayList<String>()
+    private var users = ArrayList<User>()
     private val messages = ArrayList<ChatMessage>()
 
     init {
@@ -40,9 +42,9 @@ class Chatroom(private val id: String) {
     private fun loadRoomData() {
         // !TODO! Connect to database and load config data
         this.name = "Chatroom_1"
-        this.users.add("Luca")
-        this.users.add("Viktor")
-        this.users.add("Maaran")
+        this.users.add(User(0))
+        this.users.add(User(1))
+        this.users.add(User(2))
     }
 
     private fun loadRoomMessages() {
@@ -117,19 +119,21 @@ class Chatroom(private val id: String) {
     }
 
     private fun sendMessage(input: String) {
-        this.addMessage(ChatMessage("Viktor", input))
+        val userName = UserSession.getInstance().user!!.firstName
+        this.addMessage(ChatMessage(userName, input))
     }
 
     @Composable
     private fun RenderMessages(messages: ArrayList<ChatMessage>, modifier: Modifier) {
-        val _USER_NAME = "Viktor" // !DEBUG!
+        val userName = UserSession.getInstance().user!!.firstName
+
         Box {
            LazyVerticalGrid(
                columns = GridCells.Fixed(1),
                verticalArrangement = Arrangement.SpaceEvenly,
            ) {
                items(messages.count()) { index ->
-                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(_USER_NAME))
+                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(userName))
                }
            }
         }

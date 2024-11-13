@@ -19,14 +19,13 @@ import com.example.chatterplay.UserSession
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
 
 class ChatList : ComponentActivity() {
-    private var chatroom: Chatroom? = null
-    private val session = UserSession()
+    override fun onStart() {
+        super.onStart()
+        UserSession.getInstance().init()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        this.session.start()
-        this.chatroom = this.session.currentChat
 
         enableEdgeToEdge()
         setContent {
@@ -42,7 +41,7 @@ class ChatList : ComponentActivity() {
 
     @Composable
     fun LoadChats() {
-        val chatIds: Array<String> = this.session.chats.keys.toTypedArray()
+        val chatIds: Array<String> = UserSession.getInstance().chats.keys.toTypedArray()
 
         LazyVerticalGrid(columns = GridCells.Fixed(1)) {
             items(chatIds.size) { index ->
@@ -53,14 +52,9 @@ class ChatList : ComponentActivity() {
 
     @Composable
     private fun LoadChat(id: String) {
-        val session = this.session
-
         Button(onClick = {
-            session.joinChat(id)
             val intent = Intent(this, ChatActivity::class.java)
-            val bundle = Bundle()
-            bundle.putString("chatroomId", id)
-            intent.putExtras(bundle)
+            UserSession.getInstance().joinChat(id)
             startActivity(intent)
         }) {
             Text(id)

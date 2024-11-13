@@ -8,21 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.example.chatterplay.UserSession
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
 
 class ChatActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val chatroomId = savedInstanceState!!.getString("chatId").toString()
-        val chatroom = Chatroom(chatroomId)
+        val chatroom = UserSession.getInstance().currentChat
 
         enableEdgeToEdge()
         setContent {
             ChatterPlayTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    chatroom.Render(Modifier.padding(innerPadding))
+                    chatroom!!.Render(Modifier.padding(innerPadding))
                 }
             }
         }
