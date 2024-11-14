@@ -1,5 +1,6 @@
 package com.example.chatterplay.game
 
+
 import androidx.compose.runtime.Composable
 
 abstract class Game {
@@ -8,7 +9,7 @@ abstract class Game {
     abstract fun playMove(row: Int, col: Int): Boolean
     abstract fun resetGame()
     abstract fun getBoard(): Array<CharArray>
-    abstract fun checkWinner(): Char?
+    abstract fun checkWinner(): Boolean
     @Composable
     abstract fun GameUI()
 }

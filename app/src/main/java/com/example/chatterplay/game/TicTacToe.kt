@@ -33,18 +33,19 @@ open class TicTacToe : Game() {
     private var isGameOver by mutableStateOf(false)
 
     override fun playMove(row: Int, col: Int): Boolean {
-        if (_board[row][col] == ' ' && !isGameOver) {
-            _board[row][col] = _currentPlayer
-            _winner = checkWinner()
-
-            if (_winner != null || _board.all { it.all { cell -> cell != ' ' } }) {
-                isGameOver = true
-            } else {
-                _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
-            }
-            return true
+        if (_board[row][col] != ' ' || isGameOver) {
+            return false
         }
-        return false
+
+        _board[row][col] = _currentPlayer
+        _winner = _currentPlayer.takeIf { checkWinner() }
+
+        if (_winner != null || _board.all { it.all { cell -> cell != ' ' } }) {
+            isGameOver = true
+        } else {
+            _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
+        }
+        return true
     }
 
     override fun resetGame() {
@@ -58,25 +59,25 @@ open class TicTacToe : Game() {
         return _board.map { it.toCharArray() }.toTypedArray()
     }
 
-    override fun checkWinner(): Char? {
-        for (i in 0..2) {
-            if (_board[i][0] != ' ' && _board[i][0] == _board[i][1] && _board[i][1] == _board[i][2]) {
-                return _board[i][0]
+    override fun checkWinner(): Boolean {
+        for (row in 0..2) {
+            if (_board[row][0] != ' ' &&  _board[row][0] == _board[row][1] && _board[row][1] == _board[row][2]) {
+                return true
             }
-            if (_board[0][i] != ' ' && _board[0][i] == _board[1][i] && _board[1][i] == _board[2][i]) {
-                return _board[0][i]
+        }
+        for (col in 0..2) {
+            if (_board[0][col] != ' ' && _board[0][col] == _board[1][col] && _board[1][col] == _board[2][col]) {
+                return true
             }
         }
         if (_board[0][0] != ' ' && _board[0][0] == _board[1][1] && _board[1][1] == _board[2][2]) {
-            return _board[0][0]
+            return true
         }
         if (_board[0][2] != ' ' && _board[0][2] == _board[1][1] && _board[1][1] == _board[2][0]) {
-            return _board[0][2]
+            return true
         }
-        return null
+        return false
     }
-
-
     @Composable
     override fun GameUI() {
         Column(
