@@ -8,6 +8,10 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
+orgRestlet = "2.4.3"
+orgRestletExtJackson = "2.4.3"
+orgRestletExtServlet = "2.4.3"
+orgRestletExtXml = "2.4.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,6 +28,10 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+org-restlet = { module = "org.restlet.jee:org.restlet", version.ref = "orgRestlet" }
+org-restlet-ext-jackson = { module = "org.restlet.jee:org.restlet.ext.jackson", version.ref = "orgRestletExtJackson" }
+org-restlet-ext-servlet = { module = "org.restlet.jee:org.restlet.ext.servlet", version.ref = "orgRestletExtServlet" }
+org-restlet-ext-xml = { module = "org.restlet.jee:org.restlet.ext.xml", version.ref = "orgRestletExtXml" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
