@@ -1,5 +1,6 @@
 package server;
 
 public enum Command {
-    LOGIN
+    LOGIN,
+    SEND
 }

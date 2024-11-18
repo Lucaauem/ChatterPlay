@@ -1,10 +1,8 @@
 package server;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class CommunicationServer {
@@ -20,46 +18,49 @@ public class CommunicationServer {
         return instance;
     }
 
-    public void addClient(ChatClient client) {
+    private void addClient(ChatClient client) {
         try {
             this.clients.put(client.getId(), client);
-            client.sendMessage("LOGGED IN");
+            System.out.println("LOGGED IN CLIENT WITH WITH " + client.getId());
         } catch (Exception e) {
-            System.out.println("COULD NOT LOG IN CLIENT WITH ID " + client.getId());
+            System.err.println("COULD NOT LOG IN CLIENT WITH ID " + client.getId());
         }
     }
 
-    public void sendMessage(int clientId, String message) throws IOException {
-        this.clients.get(clientId).sendMessage(message);
+    private void sendMessage(int clientId, String message) {
+        try {
+            this.clients.get(clientId).sendMessage(message);
+        } catch (Exception e) {
+            System.err.println("COULD NOT SEND MESSAGE TO CLIENT WITH ID " + clientId);
+        }
     }
 
-    private void onCommand(Command command, String[] content, Socket client) {
+    public void onCommand(Command command, String[] content, Socket client) {
         switch (command) {
+            // [LOGIN;ID]
             case LOGIN -> {
                 ChatClient chatClient = new ChatClient(Integer.parseInt(content[0]), client);
                 this.addClient(chatClient);
+            }
+            // [SEND;FROM;TO;MESSAGE]
+            case SEND -> {
+                int targetId = Integer.parseInt(content[0]);
+                this.sendMessage(targetId, content[1]);
             }
         }
     }
 
     public static void main(String[] args) throws IOException {
-        CommunicationServer communicationServer = CommunicationServer.getInstance();
         ServerSocket serverSocket = new ServerSocket(8080);
-
         System.out.println("ONLINE");
-        // !TODO! Send data in better format (e.g. JSON)
-        // !TODO! Start as thread
-        Socket clientSocket = serverSocket.accept();
 
         while (true) {
+            // !TODO! Send data in better format (e.g. JSON)
             // !TODO! Start as thread
-            DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
+            Socket clientSocket = serverSocket.accept();
 
-            String message = inputStream.readUTF();
-            String[] messageContent = message.split(";");
-            Command command = Command.valueOf(messageContent[0]);
-
-            communicationServer.onCommand(command, Arrays.copyOfRange(messageContent, 1, messageContent.length), clientSocket);
+            Receiver receiver = new Receiver(clientSocket);
+            receiver.start();
         }
     }
 }

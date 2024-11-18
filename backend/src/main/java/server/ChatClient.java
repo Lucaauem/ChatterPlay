@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ChatClient {
-    private int id;
-    private Socket socket;
+    private final int id;
+    private final Socket socket;
 
     public ChatClient(int id, Socket socket) {
         this.id = id;
