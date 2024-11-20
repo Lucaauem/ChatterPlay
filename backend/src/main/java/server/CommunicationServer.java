@@ -37,6 +37,7 @@ public class CommunicationServer {
     private void sendMessage(int chatId, String message) {
         try {
             this.chatRooms.get(chatId).sendMessage(message);
+            System.out.println("SEND MESSAGE TO CHATROOM WITH ID " + chatId + ": " + message);
         } catch (Exception e) {
             System.err.println("COULD NOT SEND MESSAGE TO CHAT WITH ID " + chatId);
         }
@@ -69,8 +70,8 @@ public class CommunicationServer {
         System.out.println("ONLINE");
 
         // !TODO! Load chatrooms from db
-        CommunicationServer.getInstance().addChatRoom(new ChatRoom(0));
-        CommunicationServer.getInstance().addChatRoom(new ChatRoom(1));
+        CommunicationServer.getInstance().addChatRoom(new ChatRoom(12345));
+        CommunicationServer.getInstance().addChatRoom(new ChatRoom(12346));
 
         while (true) {
             // !TODO! Send data in better format (e.g. JSON)

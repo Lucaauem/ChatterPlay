@@ -14,9 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-class ChatMessage(sender: String, content: String) {
+class ChatMessage(sender: String, content: String, chatId: Int) {
     private var sender = sender
-    private var content = content
+    val content = content
+    val chatId = chatId
 
     fun isOwnMessage(userName: String) : Boolean {
         return this.sender == userName

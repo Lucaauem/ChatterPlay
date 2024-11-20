@@ -1,6 +1,9 @@
 package com.example.chatterplay
 
+import android.util.Log
+import com.example.chatterplay.chat.ChatMessage
 import com.example.chatterplay.chat.Chatroom
+import com.example.chatterplay.connection.Client
 import com.example.chatterplay.user.User
 
 class UserSession private constructor() {
@@ -21,6 +24,7 @@ class UserSession private constructor() {
         private set
     var chats = HashMap<String, Chatroom>()
         private set
+    private lateinit var sessionClient: Client
 
     fun init() {
         this.loadChatRooms()
@@ -28,6 +32,8 @@ class UserSession private constructor() {
 
     fun logIn(user: User) {
         this.user = user
+        this.sessionClient = Client()
+        this.sessionClient.start()
     }
 
     fun isLoggedIn() : Boolean {
@@ -36,13 +42,18 @@ class UserSession private constructor() {
 
     private fun loadChatRooms() {
         // !TODO! Get chats via userId from db
-        this.chats["cr_12345"] = Chatroom()
-        this.chats["cr_12346"] = Chatroom()
+        this.chats["cr_12345"] = Chatroom(12345)
+        this.chats["cr_12346"] = Chatroom(12346)
     }
 
     fun joinChat(id: String) {
         if(this.chats[id] != null) {
             this.currentChat = this.chats[id]
         }
+    }
+
+    fun sendMessage(message: ChatMessage) {
+        Log.i("DEBUG", "SEND;${message.chatId};${message.content}")
+        this.sessionClient.sendMessage("SEND;${message.chatId};${message.content}")
     }
 }

@@ -29,14 +29,16 @@ import androidx.compose.ui.zIndex
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.user.User
 
-class Chatroom {
+class Chatroom (private var id: Int){
     private var name = ""
     private var users = ArrayList<User>()
     private val messages = ArrayList<ChatMessage>()
+    private var isOnInit = true
 
     init {
         this.loadRoomData()
         this.loadRoomMessages()
+        this.isOnInit = false
     }
 
     private fun loadRoomData() {
@@ -49,19 +51,23 @@ class Chatroom {
 
     private fun loadRoomMessages() {
         // !TODO! Connect to database and load messages
-        this.addMessage(ChatMessage("Luca", "Hi!!!"))
-        this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!"))
-        this.addMessage(ChatMessage("Maaran", "Hallo."))
-        this.addMessage(ChatMessage("Luca", "Hi!!!"))
-        this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!"))
-        this.addMessage(ChatMessage("Maaran", "Hallo."))
-        this.addMessage(ChatMessage("Luca", "Hi!!!"))
-        this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!"))
-        this.addMessage(ChatMessage("Maaran", "Hallo."))
+        this.addMessage(ChatMessage("Luca", "Hi!!!", this.id))
+        //this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!", this.id))
+        this.addMessage(ChatMessage("Maaran", "Hallo.", this.id))
+        this.addMessage(ChatMessage("Luca", "Hi!!!", this.id))
+        //this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!", this.id))
+        this.addMessage(ChatMessage("Maaran", "Hallo.", this.id))
+        this.addMessage(ChatMessage("Luca", "Hi!!!", this.id))
+        //this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!", this.id))
+        this.addMessage(ChatMessage("Maaran", "Hallo.", this.id))
     }
 
     private fun addMessage(message: ChatMessage) {
         this.messages.add(message)
+
+        if(!this.isOnInit) {
+            UserSession.getInstance().sendMessage(message)
+        }
     }
 
     @Composable
@@ -120,7 +126,7 @@ class Chatroom {
 
     private fun sendMessage(input: String) {
         val userName = UserSession.getInstance().user!!.firstName
-        this.addMessage(ChatMessage(userName, input))
+        this.addMessage(ChatMessage(userName, input, this.id))
     }
 
     @Composable

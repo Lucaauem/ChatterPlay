@@ -2,8 +2,9 @@ package com.example.chatterplay.user
 
 import java.util.Date
 
-
-class User(private var id: Int) {
+class User {
+    var id: Int = -1
+        private set
     var firstName: String = ""
         private set
     private var lastName = ""
@@ -11,7 +12,8 @@ class User(private var id: Int) {
     private var origin: String? = null
     private var joinDate = Date()
 
-    init {
+    constructor(id: Int) {
+        this.id = id
         loadData()
     }
 
