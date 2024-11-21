@@ -16,8 +16,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            name = "maven.restlet.org"
+            url = uri("https://maven.restlet.talend.com")
+        }
     }
 }
 
 rootProject.name = "ChatterPlay"
 include(":app")
+include(":backend")
