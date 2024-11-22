@@ -5,15 +5,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import server.client.Client;
 import server.client.ClientManager;
 
 public class Receiver extends Thread {
-    private ServerSocket socket;
+    private final ServerSocket socket;
 
     public Receiver() throws IOException {
-        this.socket = new ServerSocket(8081);
+        this.socket = new ServerSocket(RestServer.SOCKET_PORT);
     }
 
     @Override
@@ -29,12 +28,12 @@ public class Receiver extends Thread {
                 Client client = ClientManager.getInstance().getClient(loginId);
 
                 if(client == null) {
-                    output.writeUTF("403");
+                    output.writeUTF("ERROR");
                     return;
                 }
 
                 client.setSocket(clientSocket);
-                output.writeUTF("200");
+                output.writeUTF("" + RestServer.SOCKET_PORT);
             }
         } catch (IOException e) {
             System.out.println("ERROR ON RECEIVER");

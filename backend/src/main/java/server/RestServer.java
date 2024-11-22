@@ -6,10 +6,12 @@ import org.restlet.Restlet;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.restlet.service.LogService;
-
 import server.ressources.User;
 
 public class RestServer extends Application {
+    public static int REST_PORT = 8080;
+    public static int SOCKET_PORT = 8081;
+
     @Override
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
@@ -19,14 +21,13 @@ public class RestServer extends Application {
 
     public static void main(String[] args) throws Exception {
         Component component = new Component();
-        component.getServers().add(Protocol.HTTP, 8080);
+        component.getServers().add(Protocol.HTTP, REST_PORT);
         component.getDefaultHost().attach(new RestServer());
         component.setLogService(new LogService(false));
         component.start();
 
         Receiver receiver = new Receiver();
         receiver.start();
-
     }
 
     public static void log(String message) {
