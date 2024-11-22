@@ -1,6 +1,6 @@
 package server.database;
 
-import server.Chatroom;
+import server.chatroom.Chatroom;
 
 public class DatabaseHandler {
     private static DatabaseHandler instance = null;
@@ -15,7 +15,7 @@ public class DatabaseHandler {
     }
 
     // !TODO! Get data from database
-    public Chatroom[] getChatsByUserid(String id) {
+    public Chatroom[] getChatrooms() {
         return new Chatroom[] {
                 new Chatroom("a24652", "Chatroom 1"),
                 new Chatroom("b3985t", "Pseudo Chat"),

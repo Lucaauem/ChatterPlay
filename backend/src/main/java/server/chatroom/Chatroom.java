@@ -1,4 +1,4 @@
-package server;
+package server.chatroom;
 
 public class Chatroom {
     private final String id;

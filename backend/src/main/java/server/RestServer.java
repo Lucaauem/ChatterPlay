@@ -16,7 +16,7 @@ public class RestServer extends Application {
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
         router.attach("/user", User.class);
-        router.attach("/chatroom/{userId}", ChatroomRessource.class);
+        router.attach("/chatroom", ChatroomRessource.class);
         return router;
     }
 
