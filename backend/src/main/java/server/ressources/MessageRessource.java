@@ -7,8 +7,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import java.io.IOException;
-
-import server.RestServer;
 import server.chatroom.ChatroomManager;
 import server.database.DatabaseHandler;
 import server.message.Message;
@@ -33,8 +31,7 @@ public class MessageRessource extends ServerResource {
         String senderId = json.getString("senderId");
         String content = json.getString("content");
 
-        RestServer.log("Send message '" + content + "' to chatroom with id " + chatId);
+        DatabaseHandler.getInstance().addMessage(new Message(DatabaseHandler.generateId(Message.ID_LENGTH), chatId, senderId, content));
         ChatroomManager.getInstance().getChatroom(chatId).sendMessage(content);
-        DatabaseHandler.getInstance().addMessage(new Message("d84ms9", chatId, senderId, content));
     }
 }

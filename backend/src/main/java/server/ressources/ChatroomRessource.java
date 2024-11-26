@@ -11,6 +11,7 @@ import java.io.IOException;
 import server.RestServer;
 import server.chatroom.Chatroom;
 import server.chatroom.ChatroomManager;
+import server.database.DatabaseHandler;
 
 public class ChatroomRessource extends ServerResource {
     @Get
@@ -37,8 +38,9 @@ public class ChatroomRessource extends ServerResource {
     @Delete
     public void removeChat(Representation body) throws IOException, JSONException {
         JSONObject json = new JSONObject(body.getText());
+        String chatId = json.getString("id");
 
-        ChatroomManager.getInstance().removeChatroom(json.getString("id"));
-        RestServer.log("Removed chatroom with id: " + json.getString("id"));
+        ChatroomManager.getInstance().removeChatroom(chatId);
+        DatabaseHandler.getInstance().removeChatroom(chatId);
     }
 }
