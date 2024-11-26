@@ -35,7 +35,7 @@ public class ChatroomManager {
     }
 
     public void createChatroom(String name) {
-        Chatroom chatroom = new Chatroom(this.generateId(), name);
+        Chatroom chatroom = new Chatroom(this.generateId(), name, new String[]{});
         this.chatrooms.put(chatroom.getId(), chatroom);
     }
 
