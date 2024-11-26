@@ -6,7 +6,7 @@ import org.restlet.Restlet;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.restlet.service.LogService;
-import server.ressources.User;
+import server.ressources.*;
 
 public class RestServer extends Application {
     public static int REST_PORT = 8080;
@@ -16,6 +16,7 @@ public class RestServer extends Application {
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
         router.attach("/user", User.class);
+        router.attach("/chatroom", ChatroomRessource.class);
         return router;
     }
 
