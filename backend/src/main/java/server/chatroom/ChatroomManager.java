@@ -30,6 +30,10 @@ public class ChatroomManager {
         }
     }
 
+    public Chatroom getChatroom(String id) {
+        return this.chatrooms.get(id);
+    }
+
     public Chatroom[] getChatrooms() {
         return this.chatrooms.values().toArray(new Chatroom[0]);
     }

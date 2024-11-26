@@ -10,7 +10,7 @@ import server.RestServer;
 import server.client.Client;
 import server.client.ClientManager;
 
-public class User extends ServerResource {
+public class UserRessource extends ServerResource {
     @Post
     public int login(Representation body) throws IOException, JSONException {
         JSONObject json = new JSONObject(body.getText());
