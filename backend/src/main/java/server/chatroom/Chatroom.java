@@ -1,6 +1,8 @@
 package server.chatroom;
 
 import java.util.HashMap;
+
+import server.RestServer;
 import server.client.Client;
 import server.client.ClientManager;
 
@@ -17,6 +19,11 @@ public class Chatroom {
         for(String clientId : clientIds) {
             this.clients.put(clientId, clientManager.getClient(clientId));
         }
+    }
+
+    public void addClient(Client client) {
+        this.clients.put(client.getId(), client);
+        RestServer.log("Client with id " + client.getId() + " joined chatroom with id " + this.id);
     }
 
      public String getId() {

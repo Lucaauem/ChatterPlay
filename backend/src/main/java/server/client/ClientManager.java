@@ -3,6 +3,7 @@ package server.client;
 import java.util.HashMap;
 
 import server.RestServer;
+import server.chatroom.ChatroomManager;
 
 public class ClientManager {
     private static ClientManager instance = null;
