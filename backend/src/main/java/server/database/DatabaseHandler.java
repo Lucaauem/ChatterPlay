@@ -2,6 +2,7 @@ package server.database;
 
 import server.RestServer;
 import server.chatroom.Chatroom;
+import server.client.Client;
 import server.message.Message;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +33,26 @@ public class DatabaseHandler {
             instance = new DatabaseHandler();
         }
         return instance;
+    }
+
+    public Client[] getClients() {
+        try {
+            String sql = "SELECT * FROM user";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            ArrayList<Client> clients = new ArrayList<>();
+            while(rs.next()) {
+                Client client = new Client(rs.getString("id"));
+                clients.add(client);
+            }
+
+            return clients.toArray(new Client[0]);
+        } catch (Exception e) {
+            RestServer.log("Could not get clients");
+            return new Client[0];
+        }
     }
 
     public void addMessage(Message message) {

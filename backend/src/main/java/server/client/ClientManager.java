@@ -2,13 +2,20 @@ package server.client;
 
 import java.util.HashMap;
 import server.RestServer;
+import server.database.DatabaseHandler;
 
 public class ClientManager {
     private static ClientManager instance = null;
 
     private final HashMap<String, Client> clients = new HashMap<>();
 
-    private ClientManager() {}
+    private ClientManager() {
+        Client[] clients = DatabaseHandler.getInstance().getClients();
+
+        for(Client client : clients) {
+            this.clients.put(client.getId(), client);
+        }
+    }
 
     public static ClientManager getInstance() {
         if(instance == null) {
@@ -18,7 +25,9 @@ public class ClientManager {
     }
 
     public void addClient(Client client) {
-        this.clients.put(client.getId(), client);
+        if(!this.clients.containsKey(client.getId())) {
+            this.clients.put(client.getId(), client);
+        }
         RestServer.log("Client wants to log in with id: " + client.getId());
     }
 
