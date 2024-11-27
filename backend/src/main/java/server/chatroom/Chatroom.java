@@ -7,6 +7,7 @@ import server.client.Client;
 import server.client.ClientManager;
 
 public class Chatroom {
+    public static final int ID_LENGTH = 6;
     private final String id;
     private final String name;
     private final HashMap<String, Client> clients = new HashMap<>();

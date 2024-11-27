@@ -6,6 +6,7 @@ import server.client.Client;
 import server.client.ClientManager;
 
 public class Message {
+    public static final int ID_LENGTH = 6;
     private final String id;
     private final Chatroom chat;
     private final Client sender;
@@ -20,5 +21,17 @@ public class Message {
 
     public String getId() {
         return this.id;
+    }
+
+    public Chatroom getChat() {
+        return this.chat;
+    }
+
+    public Client getSender() {
+        return this.sender;
+    }
+
+    public String getContent() {
+        return this.content;
     }
 }
