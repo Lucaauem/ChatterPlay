@@ -52,9 +52,24 @@ public class DatabaseHandler {
     }
 
     public Message[] getMessages(String chatId) {
-        return new Message[] {
-                new Message("dj40sj", chatId, "ss784h", "Hallo!")
-        };
+        try {
+            String sql = "SELECT * FROM messages WHERE chat_id = ?";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+
+            preparedStatement.setString(1, chatId);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            ArrayList<Message> messages = new ArrayList<>();
+            while(rs.next()) {
+                Message message = new Message(rs.getString("id"), rs.getString("chat_id"), rs.getString("sender_id"), rs.getString("content"));
+                messages.add(message);
+            }
+
+            return messages.toArray(new Message[0]);
+        } catch (Exception e) {
+            RestServer.log("Could not get messages from chatroom with id " + chatId);
+            return new Message[0];
+        }
     }
 
     public Chatroom[] getChatrooms() {
@@ -72,7 +87,7 @@ public class DatabaseHandler {
             return chatrooms.toArray(new Chatroom[0]);
         } catch (Exception e) {
             RestServer.log("Could not get chatrooms");
-            return new Chatroom[]{};
+            return new Chatroom[0];
         }
     }
 

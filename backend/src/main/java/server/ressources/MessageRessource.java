@@ -7,21 +7,30 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import java.io.IOException;
+import java.util.Arrays;
 import server.chatroom.ChatroomManager;
 import server.database.DatabaseHandler;
 import server.message.Message;
 
 public class MessageRessource extends ServerResource {
     @Get
-    public String[] getMessages() {
+    public String getMessages() throws JSONException {
         String chatId = getQuery().getValues("chat");
         Message[] messages = DatabaseHandler.getInstance().getMessages(chatId);
-        String[] messageIds = new String[messages.length];
 
+        JSONObject[] data = new JSONObject[messages.length];
         for(int i=0; i< messages.length; i++) {
-            messageIds[i] = messages[i].getId();
+            Message message = messages[i];
+            JSONObject json = new JSONObject();
+
+            json.put("id", message.getId());
+            json.put("sender", message.getSender().getId());
+            json.put("chat", message.getChat().getId());
+            json.put("content", message.getContent());
+
+            data[i] = json;
         }
-        return messageIds;
+        return Arrays.toString(data);
     }
 
     @Post
