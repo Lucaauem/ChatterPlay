@@ -102,7 +102,10 @@ public class DatabaseHandler {
             ArrayList<Chatroom> chatrooms = new ArrayList<>();
             while(rs.next()) {
                 Chatroom chat = getChatroomByResultSet(rs);
-                chatrooms.add(chat);
+
+                if(chat != null) {
+                    chatrooms.add(chat);
+                }
             }
 
             return chatrooms.toArray(new Chatroom[0]);
@@ -112,9 +115,24 @@ public class DatabaseHandler {
         }
     }
 
-    // !TODO! Load chat clients
-    private Chatroom getChatroomByResultSet(ResultSet rs) throws SQLException {
-        return new Chatroom(rs.getString("id"), rs.getString("name"), new String[]{});
+    private Chatroom getChatroomByResultSet(ResultSet rs) {
+        try {
+            String sql = "SELECT user_id FROM chat_member WHERE chat_id = ?";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+
+            preparedStatement.setString(1, rs.getString("id"));
+            ResultSet memberRs = preparedStatement.executeQuery();
+
+            ArrayList<String> memberIds = new ArrayList<>();
+            while(memberRs.next()) {
+                memberIds.add(memberRs.getString("user_id"));
+            }
+
+            return new Chatroom(rs.getString("id"), rs.getString("name"), memberIds.toArray(new String[0]));
+        } catch (Exception e) {
+            RestServer.log("Could not get chatroom");
+            return null;
+        }
     }
 
     public void createChatroom(Chatroom chat) {
