@@ -13,21 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.chatterplay.game.TicTacToe
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
-              ChatterPlayTheme {
-
-               /* Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            ChatterPlayTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         modifier = Modifier.padding(innerPadding)
                     )
-                }*/
-                  TicTacToe().GameUI()
+                }
             }
         }
     }
