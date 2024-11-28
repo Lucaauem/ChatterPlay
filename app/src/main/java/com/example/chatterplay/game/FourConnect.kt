@@ -15,97 +15,100 @@ import androidx.compose.ui.unit.sp
 import com.example.chatterplay.game.Game
 
  class FourConnect : Game() {
-    private val rows = 6
-    private val cols = 7
+     private val rows = 6
+     private val cols = 7
 
-    private var _board = mutableStateListOf(
-        MutableList(cols) { ' ' },
-        MutableList(cols) { ' ' },
-        MutableList(cols) { ' ' },
-        MutableList(cols) { ' ' },
-        MutableList(cols) { ' ' },
-        MutableList(cols) { ' ' }
-    )
+     private var _board = mutableStateListOf(
+         MutableList(cols) { ' ' },
+         MutableList(cols) { ' ' },
+         MutableList(cols) { ' ' },
+         MutableList(cols) { ' ' },
+         MutableList(cols) { ' ' },
+         MutableList(cols) { ' ' }
+     )
 
-    private var _currentPlayer by mutableStateOf('X')
-    override val currentPlayer: Char
-        get() = _currentPlayer
+     private var _currentPlayer by mutableStateOf('X')
+     override val currentPlayer: Char
+         get() = _currentPlayer
 
-    private var _winner by mutableStateOf<Char?>(null)
-    override val winner: Char?
-        get() = _winner
+     private var _winner by mutableStateOf<Char?>(null)
+     override val winner: Char?
+         get() = _winner
 
-    private var isGameOver by mutableStateOf(false)
+     private var isGameOver by mutableStateOf(false)
 
-    override fun playMove(row: Int, col: Int): Boolean {
-        if (col < 0 || col >= cols || isGameOver) return false
+     override fun playMove(row: Int, col: Int): Boolean {
+         if (col < 0 || col >= cols || isGameOver) return false
 
-        for (r in rows - 1 downTo 0) {
-            if (_board[r][col] == ' ') {
-                _board[r][col] = _currentPlayer
-                _winner = checkWinner()
-                if (_winner != null || _board.all { row -> row.all { it != ' ' } }) {
-                    isGameOver = true
-                } else {
-                    _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
-                }
-                return true
-            }
-        }
-        return false
-    }
+         for (r in rows - 1 downTo 0) {
+             if (_board[r][col] == ' ') {
+                 _board[r][col] = _currentPlayer
 
-    override fun resetGame() {
-        _board = mutableStateListOf(
-            MutableList(cols) { ' ' },
-            MutableList(cols) { ' ' },
-            MutableList(cols) { ' ' },
-            MutableList(cols) { ' ' },
-            MutableList(cols) { ' ' },
-            MutableList(cols) { ' ' }
-        )
-        _currentPlayer = 'X'
-        _winner = null
-        isGameOver = false
-    }
 
-    override fun checkWinner(): Char? {
-        for (r in 0 until rows) {
-            for (c in 0 until cols) {
-                val player = _board[r][c]
-                if (player != ' ' &&
-                    (checkDirection(r, c, 1, 0, player) ||
-                            checkDirection(r, c, 0, 1, player) ||
-                            checkDirection(r, c, 1, 1, player) ||
-                            checkDirection(r, c, 1, -1, player))
-                ) {
-                    return player
-                }
-            }
-        }
-        return null
-    }
+                 if (checkWinner()) {
+                     _winner = _currentPlayer
+                     isGameOver = true
+                 } else if (_board.all { row -> row.all { it != ' ' } }) {
+                     isGameOver = true
+                 } else {
+                     _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
+                 }
+                 return true
+             }
+         }
+         return false
+     }
 
-    private fun checkDirection(
-        row: Int,
-        col: Int,
-        rowDir: Int,
-        colDir: Int,
-        player: Char
-    ): Boolean {
-        var count = 0
-        var r = row
-        var c = col
+     override fun resetGame() {
+         _board = mutableStateListOf(
+             MutableList(cols) { ' ' },
+             MutableList(cols) { ' ' },
+             MutableList(cols) { ' ' },
+             MutableList(cols) { ' ' },
+             MutableList(cols) { ' ' },
+             MutableList(cols) { ' ' }
+         )
+         _currentPlayer = 'X'
+         _winner = null
+         isGameOver = false
+     }
 
-        while (r in 0 until rows && c in 0 until cols && _board[r][c] == player) {
-            count++
-            if (count == 4) return true
-            r += rowDir
-            c += colDir
-        }
-        return false
-    }
+     override fun checkWinner(): Boolean {
+         for (r in 0 until rows) {
+             for (c in 0 until cols) {
+                 val player = _board[r][c]
+                 if (player != ' ' &&
+                     (checkDirection(r, c, 1, 0, player) || // Horizontal
+                             checkDirection(r, c, 0, 1, player) || // Vertical
+                             checkDirection(r, c, 1, 1, player) || // Diagonal (top-left to bottom-right)
+                             checkDirection(r, c, 1, -1, player))   // Diagonal (top-right to bottom-left)
+                 ) {
+                     return true
+                 }
+             }
+         }
+         return false
+     }
 
+     private fun checkDirection(row: Int, col: Int, rowIncrement: Int, colIncrement: Int, player: Char): Boolean {
+         var count = 0
+         var currentRow = row
+         var currentCol = col
+
+         while (currentRow in 0 until rows && currentCol in 0 until cols) {
+             if (_board[currentRow][currentCol] == player) {
+                 count++
+                 if (count >= 4) {
+                     return true
+                 }
+             } else {
+                 count = 0
+             }
+             currentRow += rowIncrement
+             currentCol += colIncrement
+         }
+         return false
+     }
     override fun getBoard(): Array<CharArray> = _board.map { it.toCharArray() }.toTypedArray()
 
     @Composable
