@@ -25,6 +25,7 @@ public class MessageRessource extends ServerResource {
 
             json.put("id", message.getId());
             json.put("sender", message.getSender().getId());
+            json.put("senderName", message.getChat().getName());
             json.put("chat", message.getChat().getId());
             json.put("content", message.getContent());
 
