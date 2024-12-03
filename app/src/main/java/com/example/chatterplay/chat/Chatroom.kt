@@ -29,8 +29,11 @@ import androidx.compose.ui.zIndex
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.user.User
 
-class Chatroom {
-    private var name = ""
+class Chatroom(id: String, name: String) {
+    var name: String = name
+        private set
+    var id: String = id
+        private set
     private var users = ArrayList<User>()
     private val messages = ArrayList<ChatMessage>()
 
@@ -41,7 +44,6 @@ class Chatroom {
 
     private fun loadRoomData() {
         // !TODO! Connect to database and load config data
-        this.name = "Chatroom_1"
         this.users.add(User(0))
         this.users.add(User(1))
         this.users.add(User(2))

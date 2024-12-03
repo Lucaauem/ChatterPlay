@@ -1,7 +1,10 @@
 package com.example.chatterplay
 
 import com.example.chatterplay.chat.Chatroom
+import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.user.User
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class UserSession private constructor() {
     companion object {
@@ -35,9 +38,12 @@ class UserSession private constructor() {
     }
 
     private fun loadChatRooms() {
-        // !TODO! Get chats via userId from db
-        this.chats["cr_12345"] = Chatroom()
-        this.chats["cr_12346"] = Chatroom()
+        runBlocking {
+            val res = async { RestService.getInstance().loadChatrooms() }
+            val json = res.await()
+
+            json.keys().forEach { chats[it] = Chatroom(it, json.getString(it)) }
+        }
     }
 
     fun joinChat(id: String) {

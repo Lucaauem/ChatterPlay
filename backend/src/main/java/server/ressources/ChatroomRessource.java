@@ -15,7 +15,7 @@ import server.database.DatabaseHandler;
 
 public class ChatroomRessource extends ServerResource {
     @Get
-    public String getChatrooms() throws JSONException {
+    public String[] getChatrooms() throws JSONException {
         Chatroom[] chatrooms = ChatroomManager.getInstance().getChatrooms();
 
         JSONObject json = new JSONObject();
@@ -24,7 +24,7 @@ public class ChatroomRessource extends ServerResource {
             json.put(chat.getId(), chat.getName());
         }
 
-        return json.toString();
+        return new String[]{json.toString()};
     }
 
     @Post

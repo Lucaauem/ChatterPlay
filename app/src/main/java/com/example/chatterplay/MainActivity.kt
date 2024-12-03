@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.chat.ChatList
-import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
 import com.example.chatterplay.user.User
 import kotlin.reflect.KFunction0
@@ -43,11 +42,6 @@ class MainActivity : ComponentActivity() {
     }
     override fun onStart() {
         super.onStart()
-
-        // !TODO! For debug only!
-        val comService = RestService()
-        comService.debug()
-
 
         // !TODO! User login
         val session = UserSession.getInstance()
