@@ -19,19 +19,13 @@ data class Message (
     val content: String
 )
 
-interface UserActivityApi {
+interface RestApi {
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
     @GET("chatroom")
     suspend fun getChatrooms(): List<String>
     @GET("message")
     suspend fun getMessages(@Query("chat") chatId: String) : List<Message>
-}
-
-class UserActivityRepository(private val userActivityApi: UserActivityApi) {
-    suspend fun fetchChatrooms() = userActivityApi.getChatrooms()
-    suspend fun loginUser(data: UserLogin) = userActivityApi.loginUser(data)
-    suspend fun getMessages(chatId: String) = userActivityApi.getMessages(chatId)
 }
 
 class RestService {
@@ -45,21 +39,14 @@ class RestService {
             return instance as RestService
         }
     }
+    private val api: RestApi = ServiceLocator.restApi
 
-    private val repository: UserActivityRepository = ServiceLocator.userActivityRepository
+    suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms()[0]) }
 
-    suspend fun loadChatrooms(): JSONObject {
-        val json = JSONObject(repository.fetchChatrooms()[0])
-        return json
-    }
-
-    suspend fun login(id: String): Int {
-        val port = repository.loginUser(UserLogin(id))
-        return port
-    }
+    suspend fun login(id: String): Int { return api.loginUser(UserLogin(id)) }
 
     suspend fun loadMessages(chatId: String): ArrayList<ChatMessage> {
-        val rawMessages = repository.getMessages(chatId)
+        val rawMessages = api.getMessages(chatId)
         val messageList: ArrayList<ChatMessage> = ArrayList()
 
         rawMessages.forEach {

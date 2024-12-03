@@ -11,11 +11,7 @@ object ServiceLocator {
             .build()
     }
 
-    private val userActivityApi: UserActivityApi by lazy {
-        retrofitTypicode.create(UserActivityApi::class.java)
-    }
-
-    val userActivityRepository: UserActivityRepository by lazy {
-        UserActivityRepository(userActivityApi)
+    val restApi: RestApi by lazy {
+        retrofitTypicode.create(RestApi::class.java)
     }
 }

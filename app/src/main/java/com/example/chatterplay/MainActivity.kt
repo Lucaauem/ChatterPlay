@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
         // !TODO! User login
         val session = UserSession.getInstance()
-        session.logIn(User("1"))
+        session.logIn(User("000000"))
         if(!session.isLoggedIn()) {
             exitProcess(0)
         }

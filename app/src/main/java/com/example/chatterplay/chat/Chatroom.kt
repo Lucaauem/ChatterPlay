@@ -126,7 +126,7 @@ class Chatroom(id: String, name: String) {
 
     @Composable
     private fun RenderMessages(messages: ArrayList<ChatMessage>, modifier: Modifier) {
-        val userName = UserSession.getInstance().user!!.firstName
+        val id = UserSession.getInstance().user!!.id
 
         Box {
            LazyVerticalGrid(
@@ -134,7 +134,7 @@ class Chatroom(id: String, name: String) {
                verticalArrangement = Arrangement.SpaceEvenly,
            ) {
                items(messages.count()) { index ->
-                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(userName))
+                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(id))
                }
            }
         }
