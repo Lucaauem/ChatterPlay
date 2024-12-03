@@ -44,9 +44,9 @@ class Chatroom(id: String, name: String) {
 
     private fun loadRoomData() {
         // !TODO! Connect to database and load config data
-        this.users.add(User(0))
-        this.users.add(User(1))
-        this.users.add(User(2))
+        //this.users.add(User(0))
+        //this.users.add(User(1))
+        //this.users.add(User(2))
     }
 
     private fun loadRoomMessages() {

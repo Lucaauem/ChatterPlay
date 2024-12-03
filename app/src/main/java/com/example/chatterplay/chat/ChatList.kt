@@ -21,7 +21,7 @@ import com.example.chatterplay.ui.theme.ChatterPlayTheme
 class ChatList : ComponentActivity() {
     override fun onStart() {
         super.onStart()
-        UserSession.getInstance().init()
+        UserSession.getInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,5 +1,6 @@
 package com.example.chatterplay
 
+import android.util.Log
 import com.example.chatterplay.chat.Chatroom
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.user.User
@@ -13,6 +14,7 @@ class UserSession private constructor() {
         fun getInstance() : UserSession {
             if (instance == null) {
                 instance = UserSession()
+                instance!!.init()
             }
             return instance as UserSession
         }
@@ -31,6 +33,12 @@ class UserSession private constructor() {
 
     fun logIn(user: User) {
         this.user = user
+        runBlocking {
+            val req = async { RestService.getInstance().login(user.id) }
+            val socketPort = req.await()
+
+            // !TODO! Login with client service
+        }
     }
 
     fun isLoggedIn() : Boolean {
