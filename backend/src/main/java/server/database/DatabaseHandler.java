@@ -149,7 +149,7 @@ public class DatabaseHandler {
                 memberIds.add(memberRs.getString("user_id"));
             }
 
-            return new Chatroom(rs.getString("id"), rs.getString("name"), memberIds.toArray(new String[0]));
+            return new Chatroom(rs.getString("id"), rs.getString("name"), memberIds.toArray(new String[] {"000000"}));
         } catch (Exception e) {
             RestServer.log("Could not get chatroom");
             return null;

@@ -43,7 +43,8 @@ public class MessageRessource extends ServerResource {
         String senderId = json.getString("senderId");
         String content = json.getString("content");
 
-        DatabaseHandler.getInstance().addMessage(new Message(DatabaseHandler.generateId(Message.ID_LENGTH), chatId, senderId, content));
-        ChatroomManager.getInstance().getChatroom(chatId).sendMessage(content);
+        Message message = new Message(DatabaseHandler.generateId(Message.ID_LENGTH), chatId, senderId, content);
+        DatabaseHandler.getInstance().addMessage(message);
+        ChatroomManager.getInstance().getChatroom(chatId).sendMessage(message);
     }
 }

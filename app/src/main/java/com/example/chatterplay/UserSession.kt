@@ -1,8 +1,8 @@
 package com.example.chatterplay
 
-import android.util.Log
 import com.example.chatterplay.chat.Chatroom
 import com.example.chatterplay.communication.RestService
+import com.example.chatterplay.communication.socket.SocketSerivce
 import com.example.chatterplay.user.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -36,6 +36,9 @@ class UserSession private constructor() {
         runBlocking {
             val req = async { RestService.getInstance().login(user.id) }
             val socketPort = req.await()
+
+            val socketServce = SocketSerivce(socketPort)
+            socketServce.start()
 
             // !TODO! Login with client service
         }

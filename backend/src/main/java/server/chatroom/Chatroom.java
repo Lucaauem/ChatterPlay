@@ -2,9 +2,12 @@ package server.chatroom;
 
 import java.util.HashMap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import server.RestServer;
 import server.client.Client;
 import server.client.ClientManager;
+import server.message.Message;
 
 public class Chatroom {
     public static final int ID_LENGTH = 6;
@@ -35,9 +38,18 @@ public class Chatroom {
         return this.name;
     }
 
-    public void sendMessage(String content) {
+    public void sendMessage(Message message) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("type", "message");
+        json.put("id", message.getId());
+        json.put("chat", this.id);
+        json.put("sender", message.getSender().getId());
+        json.put("senderName", message.getSender().getName());
+        json.put("content", message.getContent());
+
         for(Client client : this.clients.values()) {
-            client.sendMessage(content);
+            if(client == null) continue;
+            client.sendMessage(json);
         }
     }
 }
