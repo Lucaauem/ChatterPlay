@@ -48,6 +48,7 @@ public class Chatroom {
         json.put("content", message.getContent());
 
         for(Client client : this.clients.values()) {
+            if(client == null) continue;
             client.sendMessage(json);
         }
     }

@@ -22,6 +22,8 @@ public class SocketSerivce extends Thread {
 
             Receiver receiver = new Receiver(new DataInputStream(socket.getInputStream()));
             receiver.start();
+
+            while(true) {}
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
