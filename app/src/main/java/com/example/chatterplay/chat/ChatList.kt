@@ -21,7 +21,7 @@ import com.example.chatterplay.ui.theme.ChatterPlayTheme
 class ChatList : ComponentActivity() {
     override fun onStart() {
         super.onStart()
-        UserSession.getInstance().init()
+        UserSession.getInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,23 +41,26 @@ class ChatList : ComponentActivity() {
 
     @Composable
     fun LoadChats() {
+        val chats : HashMap<String, Chatroom> = UserSession.getInstance().chats
         val chatIds: Array<String> = UserSession.getInstance().chats.keys.toTypedArray()
 
         LazyVerticalGrid(columns = GridCells.Fixed(1)) {
             items(chatIds.size) { index ->
-                LoadChat(chatIds[index])
+                LoadChat(chats[chatIds[index]])
             }
         }
     }
 
     @Composable
-    private fun LoadChat(id: String) {
+    private fun LoadChat(chat: Chatroom?) {
+        if(chat == null) { return }
+
         Button(onClick = {
             val intent = Intent(this, ChatActivity::class.java)
-            UserSession.getInstance().joinChat(id)
+            UserSession.getInstance().joinChat(chat.id)
             startActivity(intent)
         }) {
-            Text(id)
+            Text(chat.name + " [" + chat.id + "]")
         }
     }
 }

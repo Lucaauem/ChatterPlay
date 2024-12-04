@@ -27,10 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.chatterplay.UserSession
+import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.user.User
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
-class Chatroom {
-    private var name = ""
+class Chatroom(id: String, name: String) {
+    var name: String = name
+        private set
+    var id: String = id
+        private set
     private var users = ArrayList<User>()
     private val messages = ArrayList<ChatMessage>()
 
@@ -41,23 +47,18 @@ class Chatroom {
 
     private fun loadRoomData() {
         // !TODO! Connect to database and load config data
-        this.name = "Chatroom_1"
-        this.users.add(User(0))
-        this.users.add(User(1))
-        this.users.add(User(2))
+        //this.users.add(User(0))
+        //this.users.add(User(1))
+        //this.users.add(User(2))
     }
 
     private fun loadRoomMessages() {
-        // !TODO! Connect to database and load messages
-        this.addMessage(ChatMessage("Luca", "Hi!!!"))
-        this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!"))
-        this.addMessage(ChatMessage("Maaran", "Hallo."))
-        this.addMessage(ChatMessage("Luca", "Hi!!!"))
-        this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!"))
-        this.addMessage(ChatMessage("Maaran", "Hallo."))
-        this.addMessage(ChatMessage("Luca", "Hi!!!"))
-        this.addMessage(ChatMessage("Viktor", "Moin\nIch bin der Viktor!"))
-        this.addMessage(ChatMessage("Maaran", "Hallo."))
+        runBlocking {
+            val req = async { RestService.getInstance().loadMessages(id) }
+            val messageList = req.await()
+
+            messageList.forEach { messages.add(it) }
+        }
     }
 
     private fun addMessage(message: ChatMessage) {
@@ -120,12 +121,12 @@ class Chatroom {
 
     private fun sendMessage(input: String) {
         val userName = UserSession.getInstance().user!!.firstName
-        this.addMessage(ChatMessage(userName, input))
+        this.addMessage(ChatMessage("0000", UserSession.getInstance().user!!.id, userName, input))
     }
 
     @Composable
     private fun RenderMessages(messages: ArrayList<ChatMessage>, modifier: Modifier) {
-        val userName = UserSession.getInstance().user!!.firstName
+        val id = UserSession.getInstance().user!!.id
 
         Box {
            LazyVerticalGrid(
@@ -133,7 +134,7 @@ class Chatroom {
                verticalArrangement = Arrangement.SpaceEvenly,
            ) {
                items(messages.count()) { index ->
-                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(userName))
+                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(id))
                }
            }
         }

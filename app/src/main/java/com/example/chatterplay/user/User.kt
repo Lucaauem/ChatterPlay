@@ -3,8 +3,10 @@ package com.example.chatterplay.user
 import java.util.Date
 
 
-class User(private var id: Int) {
+class User(id: String) {
     var firstName: String = ""
+        private set
+    var id: String = id
         private set
     private var lastName = ""
     private var totalMessages = 0

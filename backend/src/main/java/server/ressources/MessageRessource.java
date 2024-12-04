@@ -9,6 +9,7 @@ import org.restlet.resource.ServerResource;
 import java.io.IOException;
 import java.util.Arrays;
 import server.chatroom.ChatroomManager;
+import server.client.ClientManager;
 import server.database.DatabaseHandler;
 import server.message.Message;
 
@@ -22,9 +23,11 @@ public class MessageRessource extends ServerResource {
         for(int i=0; i< messages.length; i++) {
             Message message = messages[i];
             JSONObject json = new JSONObject();
+            String senderId = message.getSender().getId();
 
             json.put("id", message.getId());
-            json.put("sender", message.getSender().getId());
+            json.put("sender", senderId);
+            json.put("senderName", ClientManager.getInstance().getClient(senderId).getName()); // !TODO! Get user name
             json.put("chat", message.getChat().getId());
             json.put("content", message.getContent());
 

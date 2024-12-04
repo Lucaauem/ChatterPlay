@@ -1,7 +1,11 @@
 package com.example.chatterplay
 
+import android.util.Log
 import com.example.chatterplay.chat.Chatroom
+import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.user.User
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class UserSession private constructor() {
     companion object {
@@ -10,6 +14,7 @@ class UserSession private constructor() {
         fun getInstance() : UserSession {
             if (instance == null) {
                 instance = UserSession()
+                instance!!.init()
             }
             return instance as UserSession
         }
@@ -28,6 +33,12 @@ class UserSession private constructor() {
 
     fun logIn(user: User) {
         this.user = user
+        runBlocking {
+            val req = async { RestService.getInstance().login(user.id) }
+            val socketPort = req.await()
+
+            // !TODO! Login with client service
+        }
     }
 
     fun isLoggedIn() : Boolean {
@@ -35,9 +46,12 @@ class UserSession private constructor() {
     }
 
     private fun loadChatRooms() {
-        // !TODO! Get chats via userId from db
-        this.chats["cr_12345"] = Chatroom()
-        this.chats["cr_12346"] = Chatroom()
+        runBlocking {
+            val res = async { RestService.getInstance().loadChatrooms() }
+            val json = res.await()
+
+            json.keys().forEach { chats[it] = Chatroom(it, json.getString(it)) }
+        }
     }
 
     fun joinChat(id: String) {

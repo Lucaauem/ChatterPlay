@@ -14,12 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-class ChatMessage(sender: String, content: String) {
-    private var sender = sender
-    private var content = content
+class ChatMessage(private var id: String, sender: String, private var senderName: String, private var content: String) {
+    private var senderId = sender
 
-    fun isOwnMessage(userName: String) : Boolean {
-        return this.sender == userName
+    fun isOwnMessage(id: String) : Boolean {
+        return this.senderId == id
     }
 
     @Composable
@@ -33,7 +32,7 @@ class ChatMessage(sender: String, content: String) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start) {
                 Column(modifier = boxModifier) {
                     Text(
-                        text = sender,
+                        text = senderName,
                         color = Color.White
                     )
                     Text(
