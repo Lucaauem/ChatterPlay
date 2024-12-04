@@ -34,7 +34,6 @@ public class Receiver extends Thread {
                 }
 
                 client.setSocket(clientSocket);
-                output.writeUTF("" + RestServer.SOCKET_PORT);
             }
         } catch (IOException e) {
             e.printStackTrace();

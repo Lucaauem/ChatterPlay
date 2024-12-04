@@ -13,7 +13,6 @@ public class Receiver extends Thread{
 
     public Receiver(DataInputStream dataInputStream) throws IOException {
         this.dataInputStream = dataInputStream;
-        this.dataInputStream.readUTF(); // !FIXME! Gets socket port
     }
 
     @Override
