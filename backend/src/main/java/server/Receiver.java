@@ -18,6 +18,7 @@ public class Receiver extends Thread {
     @Override
     public void run() {
         super.run();
+        System.out.println("Receiver thread started on port " + RestServer.SOCKET_PORT);
         try {
             while (true) {
                 Socket clientSocket = this.socket.accept();
@@ -36,6 +37,7 @@ public class Receiver extends Thread {
                 output.writeUTF("" + RestServer.SOCKET_PORT);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("ERROR ON RECEIVER");
         }
     }

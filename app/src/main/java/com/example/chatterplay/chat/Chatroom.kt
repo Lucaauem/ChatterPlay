@@ -61,7 +61,7 @@ class Chatroom(id: String, name: String) {
         }
     }
 
-    private fun addMessage(message: ChatMessage) {
+    fun addMessage(message: ChatMessage) {
         this.messages.add(message)
     }
 

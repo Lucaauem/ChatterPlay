@@ -3,6 +3,8 @@ package server.client;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
+import org.json.JSONObject;
 import server.RestServer;
 import server.database.DatabaseHandler;
 
@@ -33,9 +35,9 @@ public class Client {
         RestServer.log("Client logged in with id: " + this.id);
     }
 
-    public void sendMessage(String content) {
+    public void sendMessage(JSONObject content) {
         try {
-            this.outputStream.writeUTF("MSG;" + content);
+            this.outputStream.writeUTF(content.toString());
         } catch (Exception e) {
             System.err.println("Could not send message to client with id: " + this.id);
         }
