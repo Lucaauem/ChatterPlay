@@ -35,6 +35,21 @@ public class DatabaseHandler {
         return instance;
     }
 
+    public Client getClient(String id) {
+        try {
+            String sql = "SELECT * FROM user WHERE id = ?";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+
+            preparedStatement.setString(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            return new Client(rs.getString("id"), rs.getString("name"));
+        } catch (Exception e) {
+            RestServer.log("Could not get clients");
+            return new Client("-1", "NULL");
+        }
+    }
+
     public Client[] getClients() {
         try {
             String sql = "SELECT * FROM user";
@@ -44,7 +59,7 @@ public class DatabaseHandler {
 
             ArrayList<Client> clients = new ArrayList<>();
             while(rs.next()) {
-                Client client = new Client(rs.getString("id"));
+                Client client = new Client(rs.getString("id"), rs.getString("name"));
                 clients.add(client);
             }
 

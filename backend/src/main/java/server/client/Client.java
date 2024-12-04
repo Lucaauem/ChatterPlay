@@ -4,18 +4,29 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import server.RestServer;
+import server.database.DatabaseHandler;
 
 public class Client {
     private final String id;
+    private final String name;
     private DataOutputStream outputStream;
 
     public Client(String id) {
+        Client tmp = DatabaseHandler.getInstance().getClient(id);
+        this.id = tmp.getId();
+        this.name = tmp.getName();
+    }
+
+    public Client(String id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public String getId() {
         return this.id;
     }
+
+    public String getName() { return this.name; }
 
     public void setSocket(Socket socket) throws IOException {
         this.outputStream = new DataOutputStream(socket.getOutputStream());
