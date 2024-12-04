@@ -37,15 +37,21 @@ public class DatabaseHandler {
 
     public Client getClient(String id) {
         try {
+            System.out.println(id);
             String sql = "SELECT * FROM user WHERE id = ?";
             PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
 
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
 
-            return new Client(rs.getString("id"), rs.getString("name"));
+            if(rs.next()) {
+                return new Client(rs.getString("id"), rs.getString("name"));
+            }
+
+            return new Client("-1", "NULL");
         } catch (Exception e) {
-            RestServer.log("Could not get clients");
+            e.printStackTrace();
+            RestServer.log("Could not get client");
             return new Client("-1", "NULL");
         }
     }
