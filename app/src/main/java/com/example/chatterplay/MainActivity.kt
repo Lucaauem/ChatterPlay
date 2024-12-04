@@ -27,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.chatterplay.game.TicTacToe
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -36,7 +38,6 @@ import com.example.chatterplay.ui.theme.ChatterPlayTheme
 import com.example.chatterplay.user.User
 import kotlin.reflect.KFunction0
 import kotlin.system.exitProcess
-
 
 class MainActivity : ComponentActivity() {
     companion object {
