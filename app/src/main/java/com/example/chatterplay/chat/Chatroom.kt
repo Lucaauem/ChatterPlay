@@ -38,7 +38,7 @@ class Chatroom(id: String, name: String) {
     var id: String = id
         private set
     private var users = ArrayList<User>()
-    private val messages = ArrayList<ChatMessage>()
+    private val messages = mutableStateOf(listOf<ChatMessage>())
 
     init {
         this.loadRoomData()
@@ -57,17 +57,23 @@ class Chatroom(id: String, name: String) {
             val req = async { RestService.getInstance().loadMessages(id) }
             val messageList = req.await()
 
-            messageList.forEach { messages.add(it) }
+            val tmpList = messages.value.toMutableList()
+            messageList.forEach {
+                tmpList.add(it)
+            }
+            messages.value = tmpList
         }
     }
 
     fun addMessage(message: ChatMessage) {
-        this.messages.add(message)
+        val tmpList = this.messages.value.toMutableList()
+        tmpList.add(message)
+        this.messages.value = tmpList
     }
 
     @Composable
     fun Render(modifier: Modifier) {
-        val messages = this.messages
+        val messages by remember { this.messages }
         val chatroomName = this.name
         val memberCount = this.users.count()
 
@@ -120,12 +126,14 @@ class Chatroom(id: String, name: String) {
     }
 
     private fun sendMessage(input: String) {
-        val userName = UserSession.getInstance().user!!.firstName
-        this.addMessage(ChatMessage("0000", UserSession.getInstance().user!!.id, userName, input))
+        runBlocking {
+            val req = async { RestService.getInstance().sendMessage(id, UserSession.getInstance().user!!.id, input) }
+            req.await()
+        }
     }
 
     @Composable
-    private fun RenderMessages(messages: ArrayList<ChatMessage>, modifier: Modifier) {
+    private fun RenderMessages(messages: List<ChatMessage>, modifier: Modifier) {
         val id = UserSession.getInstance().user!!.id
 
         Box {

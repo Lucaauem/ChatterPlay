@@ -16,7 +16,9 @@ import server.database.DatabaseHandler;
 public class ChatroomRessource extends ServerResource {
     @Get
     public String[] getChatrooms() throws JSONException {
-        Chatroom[] chatrooms = ChatroomManager.getInstance().getChatrooms();
+        String userId = getQuery().getValues("userId");
+
+        Chatroom[] chatrooms = ChatroomManager.getInstance().getChatrooms(userId);
 
         JSONObject json = new JSONObject();
 
