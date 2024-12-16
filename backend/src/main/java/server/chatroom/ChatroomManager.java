@@ -1,5 +1,6 @@
 package server.chatroom;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import server.database.DatabaseHandler;
 
@@ -33,6 +34,18 @@ public class ChatroomManager {
 
     public Chatroom[] getChatrooms() {
         return this.chatrooms.values().toArray(new Chatroom[0]);
+    }
+
+    public Chatroom[] getChatrooms(String clientId) {
+        ArrayList<Chatroom> chatroomList = new ArrayList<>();
+
+        for (Chatroom chat : this.chatrooms.values()) {
+            if(chat.containsClient(clientId)) {
+                chatroomList.add(chat);
+            }
+        }
+
+        return chatroomList.toArray(new Chatroom[0]);
     }
 
     public void createChatroom(String name) {

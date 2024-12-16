@@ -38,6 +38,10 @@ public class Chatroom {
         return this.name;
     }
 
+    public boolean containsClient(String clientId) {
+        return this.clients.containsKey(clientId);
+    }
+
     public void sendMessage(Message message) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("type", "message");

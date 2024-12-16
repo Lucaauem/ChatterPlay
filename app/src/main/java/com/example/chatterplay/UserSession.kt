@@ -28,7 +28,7 @@ class UserSession private constructor() {
         private set
 
     fun init() {
-        this.loadChatRooms()
+
     }
 
     fun logIn(user: User) {
@@ -42,6 +42,7 @@ class UserSession private constructor() {
 
             // !TODO! Login with client service
         }
+        this.loadChatRooms()
     }
 
     fun isLoggedIn() : Boolean {

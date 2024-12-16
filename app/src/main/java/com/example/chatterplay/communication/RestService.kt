@@ -1,5 +1,6 @@
 package com.example.chatterplay.communication
 
+import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.ChatMessage
 import org.json.JSONObject
 import retrofit2.http.Body
@@ -29,7 +30,7 @@ interface RestApi {
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
     @GET("chatroom")
-    suspend fun getChatrooms(): List<String>
+    suspend fun getChatrooms(@Query("userId") userId : String): List<String>
     @GET("message")
     suspend fun getMessages(@Query("chat") chatId: String) : List<Message>
     @POST("message")
@@ -49,7 +50,7 @@ class RestService {
     }
     private val api: RestApi = ServiceLocator.restApi
 
-    suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms()[0]) }
+    suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms(UserSession.getInstance().user!!.id)[0]) }
 
     suspend fun login(id: String): Int { return api.loginUser(UserLogin(id)) }
 
