@@ -126,8 +126,10 @@ class Chatroom(id: String, name: String) {
     }
 
     private fun sendMessage(input: String) {
-        val userName = UserSession.getInstance().user!!.firstName
-        this.addMessage(ChatMessage("0000", UserSession.getInstance().user!!.id, userName, input))
+        runBlocking {
+            val req = async { RestService.getInstance().sendMessage(id, UserSession.getInstance().user!!.id, input) }
+            req.await()
+        }
     }
 
     @Composable

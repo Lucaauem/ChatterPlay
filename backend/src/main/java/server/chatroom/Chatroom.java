@@ -49,6 +49,7 @@ public class Chatroom {
 
         for(Client client : this.clients.values()) {
             if(client == null) continue;
+            RestServer.log("Send message to chatroom " + this.id + " and client with id " + client.getId());
             client.sendMessage(json);
         }
     }
