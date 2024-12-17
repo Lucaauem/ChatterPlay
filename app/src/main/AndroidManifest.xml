@@ -26,8 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".chat.ChatList" />
-        <activity android:name=".chat.ChatActivity" />
+        <activity android:name=".ui.activities.ChatlistActivity" />
+        <activity android:name=".ui.activities.ChatActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
