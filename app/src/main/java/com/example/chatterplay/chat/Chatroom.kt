@@ -72,7 +72,7 @@ class Chatroom(id: String, name: String) {
     }
 
     @Composable
-    fun Render(modifier: Modifier) {
+    fun Render() {
         val messages by remember { this.messages }
         val chatroomName = this.name
         val memberCount = this.users.count()
@@ -81,7 +81,7 @@ class Chatroom(id: String, name: String) {
 
         Box(modifier = Modifier.fillMaxHeight(1f)) {
             Column {
-                Row(modifier = modifier.zIndex(10f)) {
+                Row(modifier = Modifier.zIndex(10f)) {
                     Column(modifier = Modifier
                         .background(Color(64, 127, 183))
                         .padding(vertical = 3.dp)
@@ -104,7 +104,7 @@ class Chatroom(id: String, name: String) {
                     }
                 }
                 Row(modifier = Modifier.fillMaxHeight(0.90f)) {
-                    RenderMessages(messages, modifier)
+                    RenderMessages(messages)
                 }
                 Row(modifier = Modifier.fillMaxHeight(1f).padding(start = 10.dp, bottom = 50.dp), verticalAlignment = Alignment.Bottom) {
                     Column {
@@ -133,7 +133,7 @@ class Chatroom(id: String, name: String) {
     }
 
     @Composable
-    private fun RenderMessages(messages: List<ChatMessage>, modifier: Modifier) {
+    private fun RenderMessages(messages: List<ChatMessage>) {
         val id = UserSession.getInstance().user!!.id
 
         Box {
@@ -142,7 +142,7 @@ class Chatroom(id: String, name: String) {
                verticalArrangement = Arrangement.SpaceEvenly,
            ) {
                items(messages.count()) { index ->
-                   messages[index].ShowMessage(modifier, messages[index].isOwnMessage(id))
+                   messages[index].ShowMessage(messages[index].isOwnMessage(id))
                }
            }
         }

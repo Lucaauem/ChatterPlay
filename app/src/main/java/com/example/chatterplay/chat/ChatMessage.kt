@@ -22,8 +22,8 @@ class ChatMessage(private var id: String, sender: String, private var senderName
     }
 
     @Composable
-    fun ShowMessage(modifier: Modifier, isOwnMessage: Boolean) {
-        val boxModifier = modifier
+    fun ShowMessage(isOwnMessage: Boolean) {
+        val boxModifier = Modifier
             .background(color = Color.Blue)
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .width(200.dp)

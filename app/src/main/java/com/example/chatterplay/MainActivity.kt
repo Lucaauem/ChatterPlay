@@ -1,7 +1,5 @@
 package com.example.chatterplay
 
-import FourConnect
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,13 +25,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.chatterplay.game.TicTacToe
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.chatterplay.chat.ChatList
+import com.example.chatterplay.ui.activities.Activity
+import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
 import com.example.chatterplay.user.User
 import kotlin.reflect.KFunction0
@@ -140,7 +137,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun openChats() {
-        startActivity(Intent(this, ChatList::class.java))
+        ActivityHandler.getInstance().startActivity(this, Activity.CHAT_LIST)
     }
 
     private fun openGames() {
