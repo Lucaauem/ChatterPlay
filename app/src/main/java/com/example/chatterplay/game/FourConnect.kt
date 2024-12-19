@@ -15,102 +15,115 @@ import androidx.compose.ui.unit.sp
 import com.example.chatterplay.game.Game
 import com.example.chatterplay.game.GameMode
 
-class FourConnect(private var gameMode: GameMode = GameMode.BOT) : Game() {
-     private val rows = 6
-     private val cols = 7
+class FourConnect(private var gameMode: GameMode = GameMode.PLAYER) : Game() {
+    private val rows = 6
+    private val cols = 7
 
-     private var _board = mutableStateListOf(
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' }
-     )
+    private var _board = mutableStateListOf(
+        MutableList(cols) { ' ' },
+        MutableList(cols) { ' ' },
+        MutableList(cols) { ' ' },
+        MutableList(cols) { ' ' },
+        MutableList(cols) { ' ' },
+        MutableList(cols) { ' ' }
+    )
 
-     private var _currentPlayer by mutableStateOf('X')
-     override val currentPlayer: Char
-         get() = _currentPlayer
+    private var _currentPlayer by mutableStateOf('X')
+    override val currentPlayer: Char
+        get() = _currentPlayer
 
-     private var _winner by mutableStateOf<Char?>(null)
-     override val winner: Char?
-         get() = _winner
+    private var _winner by mutableStateOf<Char?>(null)
+    override val winner: Char?
+        get() = _winner
 
-     private var isGameOver by mutableStateOf(false)
+    private var isGameOver by mutableStateOf(false)
 
-     override fun playMove(row: Int, col: Int): Boolean {
-         if (col < 0 || col >= cols || isGameOver) return false
+    override fun playMove(row: Int, col: Int): Boolean {
+        if (col < 0 || col >= cols || isGameOver) return false
 
-         for (r in rows - 1 downTo 0) {
-             if (_board[r][col] == ' ') {
-                 _board[r][col] = _currentPlayer
+        for (r in rows - 1 downTo 0) {
+            if (_board[r][col] == ' ') {
+                _board[r][col] = _currentPlayer
 
+                if (checkWinner()) {
+                    _winner = _currentPlayer
+                    isGameOver = true
+                } else if (_board.all { row -> row.all { it != ' ' } }) {
+                    isGameOver = true
+                } else {
+                    _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
+                    if (gameMode == GameMode.BOT && _currentPlayer == 'O') {
+                        botMove()
+                    }
+                }
+                return true
+            }
+        }
+        return false
+    }
 
-                 if (checkWinner()) {
-                     _winner = _currentPlayer
-                     isGameOver = true
-                 } else if (_board.all { row -> row.all { it != ' ' } }) {
-                     isGameOver = true
-                 } else {
-                     _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
-                 }
-                 return true
-             }
-         }
-         return false
-     }
+    override fun resetGame() {
+        _board = mutableStateListOf(
+            MutableList(cols) { ' ' },
+            MutableList(cols) { ' ' },
+            MutableList(cols) { ' ' },
+            MutableList(cols) { ' ' },
+            MutableList(cols) { ' ' },
+            MutableList(cols) { ' ' }
+        )
+        _currentPlayer = 'X'
+        _winner = null
+        isGameOver = false
+    }
 
-     override fun resetGame() {
-         _board = mutableStateListOf(
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' }
-         )
-         _currentPlayer = 'X'
-         _winner = null
-         isGameOver = false
-     }
+    override fun checkWinner(): Boolean {
+        for (r in 0 until rows) {
+            for (c in 0 until cols) {
+                val player = _board[r][c]
+                if (player != ' ' &&
+                    (checkDirection(r, c, 1, 0, player) || // Horizontal
+                            checkDirection(r, c, 0, 1, player) || // Vertical
+                            checkDirection(r, c, 1, 1, player) || // Diagonal (top-left to bottom-right)
+                            checkDirection(r, c, 1, -1, player))   // Diagonal (top-right to bottom-left)
+                ) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
-     override fun checkWinner(): Boolean {
-         for (r in 0 until rows) {
-             for (c in 0 until cols) {
-                 val player = _board[r][c]
-                 if (player != ' ' &&
-                     (checkDirection(r, c, 1, 0, player) || // Horizontal
-                             checkDirection(r, c, 0, 1, player) || // Vertical
-                             checkDirection(r, c, 1, 1, player) || // Diagonal (top-left to bottom-right)
-                             checkDirection(r, c, 1, -1, player))   // Diagonal (top-right to bottom-left)
-                 ) {
-                     return true
-                 }
-             }
-         }
-         return false
-     }
+    private fun checkDirection(row: Int, col: Int, rowIncrement: Int, colIncrement: Int, player: Char): Boolean {
+        var count = 0
+        var currentRow = row
+        var currentCol = col
 
-     private fun checkDirection(row: Int, col: Int, rowIncrement: Int, colIncrement: Int, player: Char): Boolean {
-         var count = 0
-         var currentRow = row
-         var currentCol = col
+        while (currentRow in 0 until rows && currentCol in 0 until cols) {
+            if (_board[currentRow][currentCol] == player) {
+                count++
+                if (count >= 4) {
+                    return true
+                }
+            } else {
+                count = 0
+            }
+            currentRow += rowIncrement
+            currentCol += colIncrement
+        }
+        return false
+    }
 
-         while (currentRow in 0 until rows && currentCol in 0 until cols) {
-             if (_board[currentRow][currentCol] == player) {
-                 count++
-                 if (count >= 4) {
-                     return true
-                 }
-             } else {
-                 count = 0
-             }
-             currentRow += rowIncrement
-             currentCol += colIncrement
-         }
-         return false
-     }
     override fun getBoard(): Array<CharArray> = _board.map { it.toCharArray() }.toTypedArray()
+
+    private fun botMove() {
+        var col = (0 until cols).random()
+
+        while (_board[0][col] != ' ') {
+            col = (0 until cols).random()
+        }
+
+        playMove(0, col)
+    }
 
     @Composable
     override fun GameUI() {
@@ -120,7 +133,6 @@ class FourConnect(private var gameMode: GameMode = GameMode.BOT) : Game() {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Text(
                 text = when {
                     winner != null -> "Player ${winner} Wins!"
@@ -143,7 +155,7 @@ class FourConnect(private var gameMode: GameMode = GameMode.BOT) : Game() {
                     .wrapContentSize(Alignment.Center)
             ) {
                 FourConnectBoard { col ->
-                    if (!isGameOver) {
+                    if (!isGameOver && (gameMode == GameMode.PLAYER || _currentPlayer == 'X')) {
                         playMove(0, col)
                     }
                 }
@@ -158,9 +170,7 @@ class FourConnect(private var gameMode: GameMode = GameMode.BOT) : Game() {
     }
 
     @Composable
-    private fun FourConnectBoard(
-        onColumnClick: (Int) -> Unit
-    ) {
+    private fun FourConnectBoard(onColumnClick: (Int) -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
