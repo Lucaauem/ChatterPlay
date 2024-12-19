@@ -1,6 +1,4 @@
 package com.example.chatterplay.game
-
-
 import androidx.compose.runtime.Composable
 
 abstract class Game {
@@ -13,3 +11,4 @@ abstract class Game {
     @Composable
     abstract fun GameUI()
 }
+
