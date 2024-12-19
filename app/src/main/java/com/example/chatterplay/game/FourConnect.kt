@@ -13,8 +13,9 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.game.Game
+import com.example.chatterplay.game.GameMode
 
- class FourConnect : Game() {
+class FourConnect(private var gameMode: GameMode = GameMode.BOT) : Game() {
      private val rows = 6
      private val cols = 7
 

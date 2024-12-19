@@ -1,6 +1,5 @@
 package com.example.chatterplay.game
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,8 +14,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-open class TicTacToe : Game() {
-    private var _currentPlayer = 'X'
+open class TicTacToe(private var gameMode: GameMode = GameMode.BOT) : Game() {
+    private var _currentPlayer by mutableStateOf('X') // MutableState for proper recomposition
+
     override val currentPlayer: Char
         get() = _currentPlayer
 
@@ -43,14 +43,17 @@ open class TicTacToe : Game() {
         if (_winner != null || _board.all { it.all { cell -> cell != ' ' } }) {
             isGameOver = true
         } else {
-            _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
+            _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X' // Triggers recomposition
+            if (gameMode == GameMode.BOT && _currentPlayer == 'O') {
+                botMove()
+            }
         }
         return true
     }
 
     override fun resetGame() {
         _board.forEach { row -> row.fill(' ') }
-        _currentPlayer = 'X'
+        _currentPlayer = 'X' // Triggers recomposition
         _winner = null
         isGameOver = false
     }
@@ -61,7 +64,7 @@ open class TicTacToe : Game() {
 
     override fun checkWinner(): Boolean {
         for (row in 0..2) {
-            if (_board[row][0] != ' ' &&  _board[row][0] == _board[row][1] && _board[row][1] == _board[row][2]) {
+            if (_board[row][0] != ' ' && _board[row][0] == _board[row][1] && _board[row][1] == _board[row][2]) {
                 return true
             }
         }
@@ -78,6 +81,18 @@ open class TicTacToe : Game() {
         }
         return false
     }
+
+    private fun botMove() {
+        for (row in 0..2) {
+            for (col in 0..2) {
+                if (_board[row][col] == ' ') {
+                    playMove(row, col)
+                    return
+                }
+            }
+        }
+    }
+
     @Composable
     override fun GameUI() {
         Column(
@@ -98,8 +113,11 @@ open class TicTacToe : Game() {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
+            // Allow the current player to play their move
             TicTacToeBoard(_board) { row, col ->
-                playMove(row, col)
+                if (gameMode == GameMode.PLAYER || _currentPlayer == 'X') {
+                    playMove(row, col)
+                }
             }
 
             if (isGameOver) {
@@ -110,8 +128,6 @@ open class TicTacToe : Game() {
             }
         }
     }
-
-
 
     @Composable
     private fun TicTacToeBoard(board: List<MutableList<Char>>, onCellClick: (Int, Int) -> Unit) {
