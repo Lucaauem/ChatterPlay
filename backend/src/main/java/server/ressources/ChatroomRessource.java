@@ -33,7 +33,7 @@ public class ChatroomRessource extends ServerResource {
     public void createChatroom(Representation body) throws IOException, JSONException {
         JSONObject json = new JSONObject(body.getText());
 
-        ChatroomManager.getInstance().createChatroom(json.getString("name"));
+        ChatroomManager.getInstance().createChatroom(json.getString("name"), json.getString("creator"));
         RestServer.log("Created chatroom: " + json.getString("name"));
     }
 

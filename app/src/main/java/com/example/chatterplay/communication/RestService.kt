@@ -26,6 +26,11 @@ data class SendMessage (
     val content: String
 )
 
+data class CreateChatroom (
+    val name: String,
+    val creator: String
+)
+
 interface RestApi {
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
@@ -35,6 +40,8 @@ interface RestApi {
     suspend fun getMessages(@Query("chat") chatId: String) : List<Message>
     @POST("message")
     suspend fun sendMessage(@Body body: SendMessage)
+    @POST("chatroom")
+    suspend fun createChatroom(@Body body : CreateChatroom)
 }
 
 class RestService {
@@ -69,5 +76,10 @@ class RestService {
     suspend fun sendMessage(chatId: String, clientId: String, content: String) {
         val message = SendMessage(chatId, clientId, content)
         api.sendMessage(message)
+    }
+
+    suspend fun createChatroom(name: String) {
+        val chatroom = CreateChatroom(name, UserSession.getInstance().user!!.id)
+        api.createChatroom(chatroom)
     }
 }

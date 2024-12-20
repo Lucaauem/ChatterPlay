@@ -10,6 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.chatterplay.communication.RestService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class ChatCreationActivity : AppActivity() {
     @Composable
@@ -24,9 +27,17 @@ class ChatCreationActivity : AppActivity() {
         )
         Button(
             enabled = textInput.isNotEmpty(),
-            onClick = { TODO() }
+            onClick = { createChatroom(textInput) }
         ) {
             Text("Erstellen")
+        }
+    }
+
+    private fun createChatroom(name: String) {
+        runBlocking {
+            val req = async { RestService().createChatroom(name) }
+            req.await()
+            finish()
         }
     }
 }

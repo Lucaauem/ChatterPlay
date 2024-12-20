@@ -50,7 +50,6 @@ public class DatabaseHandler {
 
             return new Client("-1", "NULL");
         } catch (Exception e) {
-            e.printStackTrace();
             RestServer.log("Could not get client");
             return new Client("-1", "NULL");
         }
@@ -73,6 +72,22 @@ public class DatabaseHandler {
         } catch (Exception e) {
             RestServer.log("Could not get clients");
             return new Client[0];
+        }
+    }
+
+    public void addClientToChat(String chatId, String clientId) {
+        try {
+            String sql = "INSERT INTO chat_member (id, chat_id, user_id) VALUES (?, ?, ?)";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+
+            preparedStatement.setString(1, generateId(6));
+            preparedStatement.setString(2, chatId);
+            preparedStatement.setString(3, clientId);
+
+            preparedStatement.executeUpdate();
+            RestServer.log("User '" + clientId + "' joined chatroom with id " + chatId);
+        } catch (Exception e) {
+            RestServer.log("User '" + clientId + "' could not join chatroom with id " + chatId);
         }
     }
 

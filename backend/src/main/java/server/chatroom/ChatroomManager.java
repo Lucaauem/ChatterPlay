@@ -48,9 +48,10 @@ public class ChatroomManager {
         return chatroomList.toArray(new Chatroom[0]);
     }
 
-    public void createChatroom(String name) {
-        Chatroom chatroom = new Chatroom(DatabaseHandler.generateId(ID_LENGTH), name, new String[]{});
+    public void createChatroom(String name, String creatorId) {
+        Chatroom chatroom = new Chatroom(DatabaseHandler.generateId(ID_LENGTH), name, new String[]{creatorId});
         DatabaseHandler.getInstance().createChatroom(chatroom);
+        DatabaseHandler.getInstance().addClientToChat(chatroom.getId(), creatorId);
         this.chatrooms.put(chatroom.getId(), chatroom);
     }
 
