@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +30,10 @@ class ChatlistActivity : AppActivity() {
 
     private fun createChatroom() {
         ActivityHandler.getInstance().startActivity(this, Activity.CHAT_CREATE)
+    }
+
+    private fun joinChatroom() {
+        ActivityHandler.getInstance().startActivity(this, Activity.CHAT_JOIN)
     }
 
     override fun onResume() {
@@ -59,8 +62,7 @@ class ChatlistActivity : AppActivity() {
                 }
                 Column {
                     Button(
-                        enabled = false,
-                        onClick = { TODO() },
+                        onClick = { joinChatroom() },
                         modifier = Modifier
                             .padding(start = 5.dp, end = 5.dp, bottom = 15.dp)
                             .fillMaxWidth(1f)

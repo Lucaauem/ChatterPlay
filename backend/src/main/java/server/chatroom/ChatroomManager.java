@@ -21,6 +21,10 @@ public class ChatroomManager {
         return instance;
     }
 
+    public boolean chatroomExists(String id) {
+        return chatrooms.containsKey(id);
+    }
+
     private void loadChatrooms() {
         Chatroom[] chats = DatabaseHandler.getInstance().getChatrooms();
         for (Chatroom chat : chats) {

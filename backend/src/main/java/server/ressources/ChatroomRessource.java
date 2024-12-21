@@ -3,14 +3,14 @@ package server.ressources;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.representation.Representation;
-import org.restlet.resource.Delete;
-import org.restlet.resource.Get;
-import org.restlet.resource.Post;
-import org.restlet.resource.ServerResource;
+import org.restlet.resource.*;
+
 import java.io.IOException;
 import server.RestServer;
 import server.chatroom.Chatroom;
 import server.chatroom.ChatroomManager;
+import server.client.Client;
+import server.client.ClientManager;
 import server.database.DatabaseHandler;
 
 public class ChatroomRessource extends ServerResource {
@@ -27,6 +27,22 @@ public class ChatroomRessource extends ServerResource {
         }
 
         return new String[]{json.toString()};
+    }
+
+    @Put
+    public boolean joinChatroom(Representation entity) throws JSONException {
+        String userId = getQuery().getValues("user");
+        String chatroomId = getQuery().getValues("chatroom");
+
+        if(!ChatroomManager.getInstance().chatroomExists(chatroomId)) {
+            return false;
+        }
+
+        DatabaseHandler.getInstance().addClientToChat(chatroomId, userId);
+        Client client = ClientManager.getInstance().getClient(userId);
+        ChatroomManager.getInstance().getChatroom(chatroomId).addClient(client);
+
+        return true;
     }
 
     @Post
