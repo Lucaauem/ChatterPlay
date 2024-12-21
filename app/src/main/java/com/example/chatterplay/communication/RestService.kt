@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
+import java.sql.Timestamp
 
 data class UserLogin (
     val id: String
@@ -19,7 +20,8 @@ data class Message (
     val sender: String,
     val senderName: String,
     val chat: String,
-    val content: String
+    val content: String,
+    val timestamp: Long
 )
 
 data class SendMessage (
@@ -70,10 +72,11 @@ class RestService {
         val messageList: ArrayList<ChatMessage> = ArrayList()
 
         rawMessages.forEach {
-            val message = ChatMessage(it.id, it.sender, it.senderName, it.content)
+            val message = ChatMessage(it.id, it.sender, it.senderName, it.content, Timestamp(it.timestamp))
             messageList.add(message)
         }
 
+        messageList.sortBy { it.timestamp }
         return messageList
     }
 

@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 public class Receiver extends Thread{
     private final DataInputStream dataInputStream;
@@ -39,7 +40,8 @@ public class Receiver extends Thread{
                 data.getString("id"),
                 data.getString("sender"),
                 data.getString("senderName"),
-                data.getString("content")
+                data.getString("content"),
+                new Timestamp(data.getLong("timestamp"))
         );
 
         UserSession.Companion.getInstance().getChats().get(data.getString("chat")).addMessage(message);
