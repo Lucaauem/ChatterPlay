@@ -93,13 +93,14 @@ public class DatabaseHandler {
 
     public void addMessage(Message message) {
         try {
-            String sql = "INSERT INTO messages (id, chat_id, sender_id, content) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO messages (id, chat_id, sender_id, content, timestamp) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
 
             preparedStatement.setString(1, message.getId());
             preparedStatement.setString(2, message.getChat().getId());
             preparedStatement.setString(3, message.getSender().getId());
             preparedStatement.setString(4, message.getContent());
+            preparedStatement.setString(5, message.getTimestamp().toString());
 
             preparedStatement.executeUpdate();
             RestServer.log("Send message '" + message.getContent() + "' to chatroom with id " + message.getChat().getId());
@@ -118,7 +119,13 @@ public class DatabaseHandler {
 
             ArrayList<Message> messages = new ArrayList<>();
             while(rs.next()) {
-                Message message = new Message(rs.getString("id"), rs.getString("chat_id"), rs.getString("sender_id"), rs.getString("content"));
+                Message message = new Message(
+                        rs.getString("id"),
+                        rs.getString("chat_id"),
+                        rs.getString("sender_id"),
+                        rs.getString("content"),
+                        rs.getTimestamp("timestamp")
+                );
                 messages.add(message);
             }
 

@@ -19,8 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.ui.theme.RwthBlueDark
+import java.sql.Timestamp
 
-class ChatMessage(private var id: String, sender: String, private var senderName: String, private var content: String) {
+class ChatMessage(private var id: String, sender: String, private var senderName: String, private var content: String, val timestamp: Timestamp) {
     private var senderId = sender
 
     fun isOwnMessage(id: String) : Boolean {

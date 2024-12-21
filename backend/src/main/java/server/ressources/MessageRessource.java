@@ -8,6 +8,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import server.chatroom.ChatroomManager;
 import server.client.ClientManager;
 import server.database.DatabaseHandler;
@@ -30,6 +31,7 @@ public class MessageRessource extends ServerResource {
             json.put("senderName", ClientManager.getInstance().getClient(senderId).getName()); // !TODO! Get user name
             json.put("chat", message.getChat().getId());
             json.put("content", message.getContent());
+            json.put("timestamp", message.getTimestamp().getTime());
 
             data[i] = json;
         }
@@ -42,8 +44,9 @@ public class MessageRessource extends ServerResource {
         String chatId = json.getString("chatId");
         String senderId = json.getString("senderId");
         String content = json.getString("content");
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(new Date().getTime());
 
-        Message message = new Message(DatabaseHandler.generateId(Message.ID_LENGTH), chatId, senderId, content);
+        Message message = new Message(DatabaseHandler.generateId(Message.ID_LENGTH), chatId, senderId, content, timestamp);
         DatabaseHandler.getInstance().addMessage(message);
         ChatroomManager.getInstance().getChatroom(chatId).sendMessage(message);
     }
