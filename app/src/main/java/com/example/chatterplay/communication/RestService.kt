@@ -1,11 +1,13 @@
 package com.example.chatterplay.communication
 
+import android.util.Log
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.ChatMessage
 import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 data class UserLogin (
@@ -42,6 +44,8 @@ interface RestApi {
     suspend fun sendMessage(@Body body: SendMessage)
     @POST("chatroom")
     suspend fun createChatroom(@Body body : CreateChatroom)
+    @PUT("chatroom")
+    suspend fun joinChatroom(@Query("user") userId: String, @Query("chatroom") chatId: String) : Boolean
 }
 
 class RestService {
@@ -81,5 +85,11 @@ class RestService {
     suspend fun createChatroom(name: String) {
         val chatroom = CreateChatroom(name, UserSession.getInstance().user!!.id)
         api.createChatroom(chatroom)
+    }
+
+    suspend fun joinChatroom(chatId: String) : Boolean {
+        val status = api.joinChatroom(UserSession.getInstance().user!!.id, chatId)
+        Log.i("DEBUG", status.toString())
+        return status
     }
 }
