@@ -63,4 +63,8 @@ class UserSession private constructor() {
             this.currentChat = this.chats[id]
         }
     }
+
+    fun refreshChatlist() {
+        this.loadChatRooms()
+    }
 }

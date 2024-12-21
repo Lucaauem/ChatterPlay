@@ -17,8 +17,9 @@ class ActivityHandler {
 
     fun startActivity(source: ComponentActivity, target: Activity) {
         val targetClass = when (target){
-            Activity.CHAT_LIST -> ChatlistActivity::class.java
-            Activity.CHAT      -> ChatActivity::class.java
+            Activity.CHAT_CREATE -> ChatCreationActivity::class.java
+            Activity.CHAT_LIST   -> ChatlistActivity::class.java
+            Activity.CHAT        -> ChatActivity::class.java
         }
 
         this.startActivity(source, targetClass)
