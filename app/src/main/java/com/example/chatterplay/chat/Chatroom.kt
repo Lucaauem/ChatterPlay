@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -103,22 +104,29 @@ class Chatroom(id: String, name: String) {
                         )
                     }
                 }
-                Row(modifier = Modifier.fillMaxHeight(0.90f)) {
+                Row(modifier = Modifier.fillMaxHeight(0.87f)) {
                     RenderMessages(messages)
                 }
-                Row(modifier = Modifier.fillMaxHeight(1f).padding(start = 10.dp, bottom = 50.dp), verticalAlignment = Alignment.Bottom) {
-                    Column {
-                        TextField(
-                            modifier = Modifier.fillMaxWidth(0.75f),
-                            value = textInput,
-                            onValueChange = { textInput = it },
-                            label = { Text("Nachricht eingeben...") }
-                        )
-                    }
-                    Column(modifier = Modifier.padding(start = 10.dp)) {
-                        Button(onClick = { sendMessage(textInput); textInput = "" }) {
-                            Text("Send")
-                        }
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight(1f)
+                        .padding(start = 10.dp, end = 10.dp, bottom = 50.dp),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth(0.75f),
+                        value = textInput,
+                        onValueChange = { textInput = it },
+                        label = { Text("Nachricht eingeben...") }
+                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(0.75f),
+                        onClick = { sendMessage(textInput); textInput = "" },
+                        shape = RoundedCornerShape(10.dp),
+                    ) {
+                        Text("Send")
                     }
                 }
             }
@@ -137,14 +145,14 @@ class Chatroom(id: String, name: String) {
         val id = UserSession.getInstance().user!!.id
 
         Box {
-           LazyVerticalGrid(
-               columns = GridCells.Fixed(1),
-               verticalArrangement = Arrangement.SpaceEvenly,
-           ) {
-               items(messages.count()) { index ->
-                   messages[index].ShowMessage(messages[index].isOwnMessage(id))
-               }
-           }
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(1),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                items(messages.count()) { index ->
+                    messages[index].ShowMessage(messages[index].isOwnMessage(id))
+                }
+            }
         }
     }
 }
