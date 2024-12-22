@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -58,7 +59,8 @@ class ChatCreationActivity : AppActivity() {
             ) {
                 Button(
                     enabled = textInput.isNotEmpty(),
-                    onClick = { createChatroom(textInput) }
+                    onClick = { createChatroom(textInput) },
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(
                         text = "Erstellen",
