@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.example.chatterplay.ui.activities.Activity
 import com.example.chatterplay.ui.activities.ActivityHandler
-import com.example.chatterplay.ui.components.CpButtons.Companion.CpBigButton
+import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
 import com.example.chatterplay.user.User
 import kotlin.system.exitProcess

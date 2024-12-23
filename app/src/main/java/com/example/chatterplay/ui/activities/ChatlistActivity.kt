@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.Chatroom
-import com.example.chatterplay.ui.components.CpButtons.Companion.CpGoBackButton
-import com.example.chatterplay.ui.components.CpButtons.Companion.CpIconButton
+import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpGoBackButton
+import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconButton
 
 class ChatlistActivity : AppActivity() {
     private val chats = mutableStateOf(listOf<Chatroom>())

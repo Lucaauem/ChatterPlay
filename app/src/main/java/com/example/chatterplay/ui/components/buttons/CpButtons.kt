@@ -1,4 +1,4 @@
-package com.example.chatterplay.ui.components
+package com.example.chatterplay.ui.components.buttons
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,6 +36,22 @@ class CpButtons {
                     text = text,
                     modifier = Modifier.padding(vertical = 5.dp),
                     fontSize = 27.sp
+                )
+            }
+        }
+
+        @Composable
+        fun CpMediumButton(text: String, onClick: () -> Unit, enabled: Boolean = true) {
+            Button(
+                enabled = enabled,
+                onClick = { onClick() },
+                modifier = Modifier.fillMaxWidth(0.45f),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text(
+                    text = text,
+                    modifier = Modifier.padding(vertical = 5.dp),
+                    fontSize = 20.sp
                 )
             }
         }
