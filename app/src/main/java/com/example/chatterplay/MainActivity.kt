@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
@@ -28,17 +27,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.chatterplay.ui.activities.Activity
 import com.example.chatterplay.ui.activities.ActivityHandler
+import com.example.chatterplay.ui.components.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
 import com.example.chatterplay.user.User
-import kotlin.reflect.KFunction0
 import kotlin.system.exitProcess
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.01a"
+        const val APP_VERSION = "0.40a"
     }
     override fun onStart() {
         super.onStart()
@@ -80,8 +78,8 @@ class MainActivity : ComponentActivity() {
                                 alignment = Alignment.CenterVertically
                             )
                         ) {
-                            NavigationButton("Chatten", ::openChats)
-                            NavigationButton("Spielen", ::openGames, false)
+                            CpBigButton(text = "Chatten", onClick = { openChats() })
+                            CpBigButton(text = "Spielen", onClick = { openGames() }, enabled = false)
                         }
                         FlowRow(
                             modifier = Modifier
@@ -99,22 +97,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-    }
-
-    @Composable
-    private fun NavigationButton(text: String, clickHandler: KFunction0<Unit>, isEnabled: Boolean=true) {
-        Button(
-            enabled = isEnabled,
-            onClick = { clickHandler() },
-            modifier = Modifier.fillMaxWidth(0.65f),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(
-                text = text,
-                modifier = Modifier.padding(vertical = 5.dp),
-                fontSize = 27.sp
-            )
         }
     }
 

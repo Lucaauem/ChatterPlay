@@ -6,10 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.chatterplay.ui.activities.AppActivity
 
-class GoBackButton(modifier: Modifier, private val activity: AppActivity) :
+class GoBackButton(modifier: Modifier, activity: AppActivity) :
     CpIconButtonClass(modifier = modifier, icon = ICON, description = DESCRIPTION, onClick = { activity.finish() }) {
 
-        companion object {
+    companion object {
         private val ICON : ImageVector = Icons.AutoMirrored.Filled.ArrowBack
         private const val DESCRIPTION : String = "Go back"
     }

@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -26,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.communication.RestService
+import com.example.chatterplay.ui.components.CpButtons.Companion.CpBigButton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
@@ -62,8 +61,7 @@ class ChatJoinActivity : AppActivity() {
                 .fillMaxHeight()
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 TextField(
@@ -89,21 +87,14 @@ class ChatJoinActivity : AppActivity() {
             }
             Spacer(modifier = Modifier.height(20.dp))
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Button(
-                    enabled = textInput.isNotEmpty(),
+                CpBigButton(
+                    text = "Beitreten",
                     onClick = { validate(joinChatroom(textInput)) },
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Text(
-                        text = "Beitreten",
-                        modifier = Modifier.padding(4.dp),
-                        fontSize = 24.sp
-                    )
-                }
+                    enabled = textInput.isNotEmpty()
+                )
             }
         }
     }
