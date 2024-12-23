@@ -6,21 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,7 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.Chatroom
-import com.example.chatterplay.ui.components.GoBackButton
+import com.example.chatterplay.ui.components.CpButtons.Companion.CpGoBackButton
+import com.example.chatterplay.ui.components.CpButtons.Companion.CpIconButton
 
 class ChatlistActivity : AppActivity() {
     private val chats = mutableStateOf(listOf<Chatroom>())
@@ -73,32 +70,18 @@ class ChatlistActivity : AppActivity() {
                     .fillMaxWidth()
                     .padding(end = 10.dp, bottom = 10.dp, top = 10.dp)
             ) {
-                GoBackButton(modifier = Modifier.padding(start = 5.dp)).Render(this@ChatlistActivity)
+                CpGoBackButton(activity = this@ChatlistActivity)
                 Spacer(Modifier.weight(1f))
-                Button(
-                    onClick = { createChatroom() },
-                    shape = CircleShape,
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier.size(40.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Create chat",
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-                Button(
-                    onClick = { joinChatroom() },
-                    shape = CircleShape,
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier.size(40.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Join chat",
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
+                CpIconButton(
+                    icon = Icons.Default.Add,
+                    description = "Create chat",
+                    onClick = { createChatroom() }
+                )
+                CpIconButton(
+                    icon = Icons.Default.Search,
+                    description = "Join chat",
+                    onClick = { joinChatroom() }
+                )
             }
             Row {
                 LazyVerticalGrid(
