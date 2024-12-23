@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.chatterplay.ui.activities.AppActivity
 
-class GoBackButton(modifier: Modifier, activity: AppActivity) :
+class GoBackButton(modifier: Modifier = Modifier, activity: AppActivity) :
     CpIconButtonClass(modifier = modifier, icon = ICON, description = DESCRIPTION, onClick = { activity.finish() }) {
 
     companion object {

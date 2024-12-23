@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
-import com.example.chatterplay.user.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
@@ -38,19 +39,10 @@ class Chatroom(id: String, name: String) {
         private set
     var id: String = id
         private set
-    private var users = ArrayList<User>()
     private val messages = mutableStateOf(listOf<ChatMessage>())
 
     init {
-        this.loadRoomData()
         this.loadRoomMessages()
-    }
-
-    private fun loadRoomData() {
-        // !TODO! Connect to database and load config data
-        //this.users.add(User(0))
-        //this.users.add(User(1))
-        //this.users.add(User(2))
     }
 
     private fun loadRoomMessages() {
@@ -75,34 +67,12 @@ class Chatroom(id: String, name: String) {
     @Composable
     fun Render() {
         val messages by remember { this.messages }
-        val chatroomName = this.name
-        val memberCount = this.users.count()
-
         var textInput by remember { mutableStateOf("") }
 
         Box(modifier = Modifier.fillMaxHeight(1f)) {
             Column {
                 Row(modifier = Modifier.zIndex(10f)) {
-                    Column(modifier = Modifier
-                        .background(Color(64, 127, 183))
-                        .padding(vertical = 3.dp)
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(1f),
-                            color =  Color.White,
-                            fontSize = 25.sp,
-                            textAlign = TextAlign.Center,
-                            text = chatroomName,
-                        )
-                        Text(
-                            modifier = Modifier.fillMaxWidth(1f),
-                            color = Color.White,
-                            fontSize = 13.sp,
-                            fontStyle = FontStyle.Italic,
-                            textAlign = TextAlign.Center,
-                            text = "(${memberCount} Mitglieder)"
-                        )
-                    }
+                    StatusBar(name)
                 }
                 Row(modifier = Modifier.fillMaxHeight(0.87f)) {
                     RenderMessages(messages)
@@ -143,16 +113,42 @@ class Chatroom(id: String, name: String) {
     @Composable
     private fun RenderMessages(messages: List<ChatMessage>) {
         val id = UserSession.getInstance().user!!.id
+        var previousId = ""
 
         Box {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
                 items(messages.count()) { index ->
-                    messages[index].ShowMessage(messages[index].isOwnMessage(id))
+                    messages[index].ShowMessage(messages[index].isOwnMessage(id), previousId == messages[index].senderId)
+                    previousId = messages[index].senderId
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun StatusBar(chatroomName : String) {
+        Column(modifier = Modifier
+            .background(Color(64, 127, 183))
+            .padding(vertical = 3.dp)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(1f),
+                color =  Color.White,
+                fontSize = 25.sp,
+                textAlign = TextAlign.Center,
+                text = chatroomName,
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(1f),
+                color = Color.White,
+                fontSize = 13.sp,
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center,
+                text = "[${id}]"
+            )
         }
     }
 }
