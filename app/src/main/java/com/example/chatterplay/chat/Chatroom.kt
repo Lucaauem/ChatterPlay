@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -20,9 +21,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +39,7 @@ import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconBackgroundButton
 import com.example.chatterplay.ui.theme.RwthBlueMedium
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class Chatroom(id: String, name: String) {
@@ -93,8 +97,12 @@ class Chatroom(id: String, name: String) {
         val id = UserSession.getInstance().user!!.id
         var previousId = ""
 
+        val gridState = rememberLazyGridState()
+        val coroutineScope = rememberCoroutineScope()
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
+            state = gridState,
             verticalArrangement = Arrangement.spacedBy(0.dp),
         ) {
             items(messages.count()) { index ->
@@ -103,6 +111,13 @@ class Chatroom(id: String, name: String) {
                     previousId == messages[index].senderId
                 )
                 previousId = messages[index].senderId
+            }
+        }
+
+        // Scroll newest message (when opening the chat or while still in it)
+        LaunchedEffect(messages.size) {
+            coroutineScope.launch {
+                gridState.scrollToItem(messages.lastIndex)
             }
         }
     }
