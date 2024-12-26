@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -84,10 +85,16 @@ class MainActivity : ComponentActivity() {
                         FlowRow(
                             modifier = Modifier
                                 .fillMaxWidth(1.0f)
-                                .padding(end = 10.dp),
+                                .padding(horizontal = 10.dp),
                             verticalArrangement = Arrangement.Bottom,
                             horizontalArrangement = Arrangement.End
                         ) {
+                            Text(
+                                text = "Nutzer-ID: ${UserSession.getInstance().user!!.id}",
+                                fontStyle = FontStyle.Italic,
+                                modifier = Modifier.alpha(0.6f)
+                            )
+                            Spacer(modifier = Modifier.weight(1.0f))
                             Text(
                                 text = "Version $APP_VERSION",
                                 fontStyle = FontStyle.Italic,
