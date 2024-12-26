@@ -16,7 +16,7 @@ public class SocketSerivce extends Thread {
 
     @Override
     public void run() {
-        try (Socket socket = new Socket("172.26.144.1", PORT)){
+        try (Socket socket = new Socket(UserSession.IP, PORT)){
             super.run();
 
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());

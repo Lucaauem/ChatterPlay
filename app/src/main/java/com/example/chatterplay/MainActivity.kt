@@ -1,5 +1,6 @@
 package com.example.chatterplay
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,23 +31,21 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.example.chatterplay.ui.activities.Activity
 import com.example.chatterplay.ui.activities.ActivityHandler
+import com.example.chatterplay.ui.activities.LoginActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
-import com.example.chatterplay.user.User
-import kotlin.system.exitProcess
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.40a"
+        const val APP_VERSION = "0.50a"
     }
     override fun onStart() {
         super.onStart()
 
-        // !TODO! User login
-        val session = UserSession.getInstance()
-        session.logIn(User("000000"))
-        if(!session.isLoggedIn()) {
-            exitProcess(0)
+        if(!UserSession.getInstance().isLoggedIn()) {
+            val i = Intent(this, LoginActivity::class.java)
+            finish()
+            startActivity(i)
         }
     }
 
@@ -58,10 +57,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             ChatterPlayTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    FlowColumn (Modifier
-                        .padding(innerPadding)
-                        .fillMaxWidth(1.0f)
-                        .fillMaxHeight(1.0f),
+                    FlowColumn (
+                        Modifier
+                            .padding(innerPadding)
+                            .fillMaxWidth(1.0f)
+                            .fillMaxHeight(1.0f),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         FlowRow (

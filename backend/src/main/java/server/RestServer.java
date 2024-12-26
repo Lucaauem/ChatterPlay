@@ -18,6 +18,7 @@ public class RestServer extends Application {
         router.attach("/user", UserRessource.class);
         router.attach("/chatroom", ChatroomRessource.class);
         router.attach("/message", MessageRessource.class);
+        router.attach("/test", TestRessource.class);
         return router;
     }
 

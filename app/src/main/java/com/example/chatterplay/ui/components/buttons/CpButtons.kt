@@ -64,11 +64,11 @@ class CpButtons {
         }
 
         @Composable
-        fun CpMediumButton(text: String, onClick: () -> Unit, enabled: Boolean = true) {
+        fun CpMediumButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit, enabled: Boolean = true) {
             Button(
                 enabled = enabled,
                 onClick = { onClick() },
-                modifier = Modifier.fillMaxWidth(0.45f),
+                modifier = modifier.fillMaxWidth(0.45f),
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
