@@ -9,10 +9,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.communication.RestService
+import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
@@ -61,11 +61,10 @@ class ChatJoinActivity : AppActivity() {
                 .fillMaxHeight()
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                TextField(
+                OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(0.75f),
                     value = textInput,
                     onValueChange = { textInput = it },
@@ -88,20 +87,14 @@ class ChatJoinActivity : AppActivity() {
             }
             Spacer(modifier = Modifier.height(20.dp))
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Button(
-                    enabled = textInput.isNotEmpty(),
-                    onClick = { validate(joinChatroom(textInput)) }
-                ) {
-                    Text(
-                        text = "Beitreten",
-                        modifier = Modifier.padding(4.dp),
-                        fontSize = 24.sp
-                    )
-                }
+                CpMediumButton(
+                    text = "Beitreten",
+                    onClick = { validate(joinChatroom(textInput)) },
+                    enabled = textInput.isNotEmpty()
+                )
             }
         }
     }

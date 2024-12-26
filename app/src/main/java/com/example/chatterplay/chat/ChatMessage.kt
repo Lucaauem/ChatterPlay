@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,43 +23,56 @@ import androidx.compose.ui.unit.sp
 import com.example.chatterplay.ui.theme.RwthBlueDark
 import java.sql.Timestamp
 
-class ChatMessage(private var id: String, sender: String, private var senderName: String, private var content: String, val timestamp: Timestamp) {
-    private var senderId = sender
+class ChatMessage(val id: String, sender: String, private val senderName: String, private var content: String, val timestamp: Timestamp) {
+    val senderId = sender
 
     fun isOwnMessage(id: String) : Boolean {
         return this.senderId == id
     }
 
     @Composable
-    fun ShowMessage(isOwnMessage: Boolean) {
+    fun ShowMessage(isOwnMessage: Boolean, isPreviousSender: Boolean) {
         val edgeMargin = 7.dp
         val boxModifier = Modifier
-            .clip(RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(15.dp))
             .background(color = RwthBlueDark)
-            .padding(horizontal = 10.dp, vertical = 5.dp)
-            .width(225.dp)
+            .padding(horizontal = 15.dp, vertical = 6.dp)
+            .wrapContentWidth()
+            .widthIn(max = 225.dp)
 
-        Box{
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start) {
+        Box(modifier = Modifier.padding(top = if (isPreviousSender) 0.dp else 9.dp)){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 5.dp),
+                horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start
+            ) {
                 Column {
                     Spacer(modifier = Modifier.width(edgeMargin))
                 }
                 Column(modifier = boxModifier) {
-                    Text(
-                        text = senderName,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 17.sp
-                    )
-                    Text(
-                        text = content,
-                        color = Color.White
-                    )
+                    MessageContent(isOwnMessage, isPreviousSender)
                 }
                 Column {
                     Spacer(modifier = Modifier.width(edgeMargin))
                 }
             }
         }
+    }
+
+    @Composable
+    fun MessageContent(isOwnMessage: Boolean, isPreviousSender: Boolean) {
+        if(!(isOwnMessage || isPreviousSender)) {
+            Text(
+                text = senderName,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp
+            )
+        }
+        Text(
+            text = content,
+            color = Color.White
+        )
     }
 }
