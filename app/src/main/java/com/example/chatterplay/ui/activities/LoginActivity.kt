@@ -25,8 +25,11 @@ import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import com.example.chatterplay.user.User
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 
 class LoginActivity : AppActivity() {
     @Composable
@@ -106,7 +109,6 @@ class LoginActivity : AppActivity() {
         }
     }
 
-    // !TODO! Check if user exists
     private fun login(id: String) {
         val session = UserSession.getInstance()
         session.logIn(User(id))
@@ -116,13 +118,17 @@ class LoginActivity : AppActivity() {
     }
 
     private fun connectToServer(ipAddress: String) : Boolean {
-        try {
-            runBlocking {
-                async { RestService.testConnection(ipAddress) }.await()
+        return runBlocking {
+            try {
+                withTimeout(3500L) {
+                    withContext(Dispatchers.IO) {
+                        RestService.testConnection(ipAddress)
+                    }
+                    true
+                }
+            } catch (e: Exception) {
+                false
             }
-            return true
-        } catch (e: Exception) {
-            return false
         }
     }
 
