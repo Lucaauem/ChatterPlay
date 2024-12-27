@@ -35,8 +35,6 @@ class UserSession private constructor() {
 
             val socketServce = SocketSerivce(socketPort)
             socketServce.start()
-
-            // !TODO! Login with client service
         }
         this.loadChatRooms()
     }

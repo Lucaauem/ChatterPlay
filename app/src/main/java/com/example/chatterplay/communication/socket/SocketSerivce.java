@@ -1,7 +1,6 @@
 package com.example.chatterplay.communication.socket;
 
 import com.example.chatterplay.UserSession;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

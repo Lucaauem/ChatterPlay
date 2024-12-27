@@ -1,5 +1,6 @@
 package com.example.chatterplay.ui.activities
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,25 +20,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.chatterplay.MainActivity
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
+import com.example.chatterplay.user.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 class LoginActivity : AppActivity() {
     @Composable
     override fun Render() {
-        var textInput by remember { mutableStateOf("") }
-        var chatroomFound by remember { mutableStateOf(true) }
-
+        var userIdInput by remember { mutableStateOf("") }
+        var userExists by remember { mutableStateOf(true) }
 
         var ipAddressInput by remember { mutableStateOf("") }
         var couldConnectToServer by remember { mutableStateOf(true) }
-
-        fun validate(status : Boolean) {
-            chatroomFound = status
-        }
 
         Column(
             modifier = Modifier
@@ -48,11 +46,11 @@ class LoginActivity : AppActivity() {
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(0.75f),
-                value = textInput,
-                onValueChange = { textInput = it },
+                value = userIdInput,
+                onValueChange = { userIdInput = it },
                 label = { Text("Nutzer-ID") },
                 supportingText = {
-                    if(!chatroomFound) {
+                    if(!userExists) {
                         Text(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -88,14 +86,28 @@ class LoginActivity : AppActivity() {
             )
             CpMediumButton(
                 text = "Anmelden",
-                onClick = { couldConnectToServer = (login(ipAddressInput)) },
-                //enabled = textInput.isNotEmpty()
+                onClick = {
+                    val serverConnection : Boolean = connectToServer(ipAddressInput)
+                    couldConnectToServer = serverConnection
+
+                    if(!serverConnection) {
+                        return@CpMediumButton
+                    }
+
+                    UserSession.IP = ipAddressInput
+                    login(userIdInput)
+                },
+                enabled = ipAddressInput.isNotEmpty() && userIdInput.isNotEmpty()
             )
         }
     }
 
-    private fun login(ipAddress: String) : Boolean {
-        return connectToServer(ipAddress)
+    private fun login(id: String) {
+        val session = UserSession.getInstance()
+        session.logIn(User(id))
+        val i = Intent(this, MainActivity::class.java)
+        finish()
+        startActivity(i)
     }
 
     private fun connectToServer(ipAddress: String) : Boolean {
@@ -103,7 +115,6 @@ class LoginActivity : AppActivity() {
             runBlocking {
                 async { RestService.testConnection(ipAddress) }.await()
             }
-            UserSession.IP = ipAddress
             return true
         } catch (e: Exception) {
             return false
