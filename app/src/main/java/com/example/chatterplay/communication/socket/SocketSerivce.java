@@ -1,7 +1,6 @@
 package com.example.chatterplay.communication.socket;
 
 import com.example.chatterplay.UserSession;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,7 +15,7 @@ public class SocketSerivce extends Thread {
 
     @Override
     public void run() {
-        try (Socket socket = new Socket("172.26.144.1", PORT)){
+        try (Socket socket = new Socket(UserSession.IP, PORT)){
             super.run();
 
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());

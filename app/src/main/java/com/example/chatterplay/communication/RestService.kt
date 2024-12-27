@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.ChatMessage
 import org.json.JSONObject
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -36,6 +38,10 @@ data class CreateChatroom (
 )
 
 interface RestApi {
+    @GET("test")
+    suspend fun testConnection()
+    @GET("user")
+    suspend fun getUser(@Query("id") userId: String) : Boolean
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
     @GET("chatroom")
@@ -60,8 +66,20 @@ class RestService {
             }
             return instance as RestService
         }
+
+        suspend fun testConnection(ipAddress: String) {
+            val tmpService = Retrofit.Builder()
+                .baseUrl("http://$ipAddress:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(RestApi::class.java)
+            tmpService.testConnection()
+        }
     }
     private val api: RestApi = ServiceLocator.restApi
+
+    suspend fun getUser(id: String) : Boolean {
+        return api.getUser(id)
+    }
 
     suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms(UserSession.getInstance().user!!.id)[0]) }
 

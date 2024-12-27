@@ -10,11 +10,11 @@ import kotlinx.coroutines.runBlocking
 class UserSession private constructor() {
     companion object {
         private var instance: UserSession? = null
+        lateinit var IP : String
 
         fun getInstance() : UserSession {
             if (instance == null) {
                 instance = UserSession()
-                instance!!.init()
             }
             return instance as UserSession
         }
@@ -27,10 +27,6 @@ class UserSession private constructor() {
     var chats = HashMap<String, Chatroom>()
         private set
 
-    fun init() {
-
-    }
-
     fun logIn(user: User) {
         this.user = user
         runBlocking {
@@ -39,8 +35,6 @@ class UserSession private constructor() {
 
             val socketServce = SocketSerivce(socketPort)
             socketServce.start()
-
-            // !TODO! Login with client service
         }
         this.loadChatRooms()
     }
