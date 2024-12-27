@@ -55,8 +55,8 @@ class LoginActivity : AppActivity() {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 5.dp),
-                            fontSize = 20.sp,
+                                .padding(top = 3.dp, bottom = 10.dp),
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             text = "Nutzer nicht gefunden!",
                             color = MaterialTheme.colorScheme.error
@@ -87,14 +87,18 @@ class LoginActivity : AppActivity() {
             CpMediumButton(
                 text = "Anmelden",
                 onClick = {
+                    // Check if server is found
                     val serverConnection : Boolean = connectToServer(ipAddressInput)
                     couldConnectToServer = serverConnection
-
-                    if(!serverConnection) {
-                        return@CpMediumButton
-                    }
+                    if(!serverConnection) { return@CpMediumButton }
 
                     UserSession.IP = ipAddressInput
+
+                    // Check if user is found
+                    val userFound : Boolean = searchUser(userIdInput)
+                    userExists = userFound
+                    if(!userFound) { return@CpMediumButton }
+
                     login(userIdInput)
                 },
                 enabled = ipAddressInput.isNotEmpty() && userIdInput.isNotEmpty()
@@ -102,6 +106,7 @@ class LoginActivity : AppActivity() {
         }
     }
 
+    // !TODO! Check if user exists
     private fun login(id: String) {
         val session = UserSession.getInstance()
         session.logIn(User(id))
@@ -119,5 +124,14 @@ class LoginActivity : AppActivity() {
         } catch (e: Exception) {
             return false
         }
+    }
+
+    private fun searchUser(id: String) : Boolean {
+        var userFound = false
+        runBlocking {
+            val req = async { RestService.getInstance().getUser(id) }
+            userFound = req.await()
+        }
+        return userFound
     }
 }

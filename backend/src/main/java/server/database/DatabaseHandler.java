@@ -37,7 +37,6 @@ public class DatabaseHandler {
 
     public Client getClient(String id) {
         try {
-            System.out.println(id);
             String sql = "SELECT * FROM user WHERE id = ?";
             PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
 
