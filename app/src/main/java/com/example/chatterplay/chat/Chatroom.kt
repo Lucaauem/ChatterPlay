@@ -116,6 +116,10 @@ class Chatroom(id: String, name: String) {
 
         // Scroll newest message (when opening the chat or while still in it)
         LaunchedEffect(messages.size) {
+            if(messages.isEmpty()) {
+                return@LaunchedEffect
+            }
+
             coroutineScope.launch {
                 gridState.scrollToItem(messages.lastIndex)
             }
