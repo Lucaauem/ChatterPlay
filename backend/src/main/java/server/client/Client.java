@@ -3,6 +3,7 @@ package server.client;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.Date;
 
 import org.json.JSONObject;
 import server.RestServer;
@@ -10,25 +11,37 @@ import server.database.DatabaseHandler;
 
 public class Client {
     private final String id;
-    private final String name;
+    private final String firstName;
+    private final String lastName;
+    private final String origin;
+    private final Date joined;
+
     private DataOutputStream outputStream;
 
     public Client(String id) {
         Client tmp = DatabaseHandler.getInstance().getClient(id);
         this.id = tmp.getId();
-        this.name = tmp.getName();
+        this.firstName = tmp.getFirstName();
+        this.lastName = tmp.getLastName();
+        this.origin = tmp.getOrigin();
+        this.joined = tmp.getJoined();
     }
 
-    public Client(String id, String name) {
+    public Client(String id, String firstName, String lastName, String origin, Date joined) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.origin = origin;
+        this.joined = joined;
     }
 
     public String getId() {
         return this.id;
     }
-
-    public String getName() { return this.name; }
+    public String getFirstName() { return this.firstName; }
+    public String getLastName() { return this.lastName; }
+    public String getOrigin() { return this.origin; }
+    public Date getJoined() { return this.joined; }
 
     public void setSocket(Socket socket) throws IOException {
         this.outputStream = new DataOutputStream(socket.getOutputStream());

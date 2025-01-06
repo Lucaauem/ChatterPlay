@@ -34,4 +34,9 @@ public class ClientManager {
     public Client getClient(String id) {
         return this.clients.get(id);
     }
+
+    public void removeClient(String id) {
+        this.clients.remove(id);
+        DatabaseHandler.getInstance().removeClient(id);
+    }
 }

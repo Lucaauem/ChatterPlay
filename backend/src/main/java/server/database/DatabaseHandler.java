@@ -44,13 +44,13 @@ public class DatabaseHandler {
             ResultSet rs = preparedStatement.executeQuery();
 
             if(rs.next()) {
-                return new Client(rs.getString("id"), rs.getString("name"));
+                return getClientFromResultSet(rs);
             }
 
-            return new Client("-1", "NULL");
+            return null;
         } catch (Exception e) {
             RestServer.log("Could not get client");
-            return new Client("-1", "NULL");
+            return null;
         }
     }
 
@@ -63,14 +63,35 @@ public class DatabaseHandler {
 
             ArrayList<Client> clients = new ArrayList<>();
             while(rs.next()) {
-                Client client = new Client(rs.getString("id"), rs.getString("name"));
-                clients.add(client);
+                clients.add(getClientFromResultSet(rs));
             }
 
             return clients.toArray(new Client[0]);
         } catch (Exception e) {
             RestServer.log("Could not get clients");
             return new Client[0];
+        }
+    }
+
+    private Client getClientFromResultSet(ResultSet rs) throws SQLException {
+        return new Client(rs.getString("id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("origin"),
+                rs.getDate("joined")
+        );
+    }
+
+    public void removeClient(String clientId) {
+        try {
+            String sql = "DELETE FROM user WHERE id = ?";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+            preparedStatement.setString(1, clientId);
+            preparedStatement.executeUpdate();
+
+            RestServer.log("Removed client with id: " + clientId);
+        } catch (Exception e) {
+            RestServer.log("Could not remove client with id " + clientId);
         }
     }
 
