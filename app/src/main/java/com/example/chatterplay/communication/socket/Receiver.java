@@ -27,6 +27,8 @@ public class Receiver extends Thread{
 
                 if(data.getString("type").equals("message")) {
                     this.addMessage(data);
+                } else if(data.getString("type").equals("invite")) {
+                    Log.i("DEBUG", "GAME INVITE");
                 }
             } catch (Exception e) {
                 Log.e("DEBUG", e.toString());

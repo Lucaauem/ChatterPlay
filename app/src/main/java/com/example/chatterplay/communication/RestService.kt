@@ -37,6 +37,11 @@ data class CreateChatroom (
     val creator: String
 )
 
+data class GameInvitation (
+    val oponentId: String,
+    val creatorId: String
+)
+
 interface RestApi {
     @GET("test")
     suspend fun testConnection()
@@ -54,6 +59,8 @@ interface RestApi {
     suspend fun createChatroom(@Body body : CreateChatroom)
     @PUT("chatroom")
     suspend fun joinChatroom(@Query("user") userId: String, @Query("chatroom") chatId: String) : Boolean
+    @POST("game")
+    suspend fun inviteToGame(@Body body: GameInvitation)
 }
 
 class RestService {
@@ -112,5 +119,12 @@ class RestService {
         val status = api.joinChatroom(UserSession.getInstance().user!!.id, chatId)
         Log.i("DEBUG", status.toString())
         return status
+    }
+
+    suspend fun inviteToGame(oponentId: String) {
+        val creatorId = UserSession.getInstance().user!!.id
+        val invitation = GameInvitation(oponentId, creatorId)
+
+        api.inviteToGame(invitation)
     }
 }
