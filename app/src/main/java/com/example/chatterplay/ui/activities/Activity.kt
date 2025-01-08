@@ -4,5 +4,7 @@ enum class Activity {
     CHAT_CREATE,
     CHAT_JOIN,
     CHAT_LIST,
-    CHAT
+    CHAT,
+    GAME,
+    GAME_LIST,
 }
