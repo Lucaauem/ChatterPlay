@@ -3,6 +3,10 @@ package com.example.chatterplay.communication.socket;
 import android.util.Log;
 import com.example.chatterplay.UserSession;
 import com.example.chatterplay.chat.ChatMessage;
+import com.example.chatterplay.ui.activities.Activity;
+import com.example.chatterplay.ui.activities.ActivityHandler;
+import com.example.chatterplay.ui.activities.games.GameActivities;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.DataInputStream;
@@ -28,7 +32,7 @@ public class Receiver extends Thread{
                 if(data.getString("type").equals("message")) {
                     this.addMessage(data);
                 } else if(data.getString("type").equals("invite")) {
-                    Log.i("DEBUG", "GAME INVITE");
+                    this.handleGameInvite(data);
                 }
             } catch (Exception e) {
                 Log.e("DEBUG", e.toString());
@@ -47,5 +51,20 @@ public class Receiver extends Thread{
         );
 
         UserSession.Companion.getInstance().getChats().get(data.getString("chat")).addMessage(message);
+    }
+
+    private void handleGameInvite(JSONObject data) throws JSONException {
+        String gameId = data.getString("gameId");
+        UserSession.Companion.getInstance().setCurrentGameId(gameId);
+
+        assert UserSession.Companion.getInstance().getUser() != null;
+        assert UserSession.Companion.getInstance() .getMainActivity() != null;
+
+        if(!data.getString("creatorId").equals(UserSession.Companion.getInstance().getUser().getId())) {
+            GameActivities gameType = GameActivities.valueOf(data.getString("gameType"));
+            UserSession.Companion.getInstance().openGame(gameType);
+        }
+
+        ActivityHandler.Companion.getInstance().startActivity(UserSession.Companion.getInstance().getMainActivity(), Activity.GAME);
     }
 }

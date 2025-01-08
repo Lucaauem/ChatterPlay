@@ -16,12 +16,15 @@ public class GameRessource extends ServerResource {
         JSONObject jsonBody = new JSONObject(body.getText());
         String oponentId = jsonBody.getString("oponentId");
         String creatorId = jsonBody.getString("creatorId");
+        String gameType = jsonBody.getString("gameType");
         String gameId = GameHandler.getInstance().createGame();
 
-        System.out.println(creatorId + " invited " + oponentId);
+        System.out.println(creatorId + " invited " + oponentId + " to " + gameType);
 
         JSONObject json = new JSONObject();
         json.put("type", "invite");
+        json.put("creatorId", creatorId);
+        json.put("gameType", gameType);
         json.put("gameId", gameId);
 
         ClientManager.getInstance().getClient(creatorId).sendMessage(json);

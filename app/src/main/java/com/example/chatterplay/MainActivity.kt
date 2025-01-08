@@ -34,6 +34,7 @@ import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.LoginActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
+import com.example.chatterplay.user.User
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -47,6 +48,8 @@ class MainActivity : ComponentActivity() {
             finish()
             startActivity(i)
         }
+
+        UserSession.getInstance().mainActivity = this
     }
 
     @OptIn(ExperimentalLayoutApi::class)

@@ -3,6 +3,8 @@ package com.example.chatterplay.communication
 import android.util.Log
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.ChatMessage
+import com.example.chatterplay.game.Game
+import com.example.chatterplay.ui.activities.games.GameActivities
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -39,7 +41,8 @@ data class CreateChatroom (
 
 data class GameInvitation (
     val oponentId: String,
-    val creatorId: String
+    val creatorId: String,
+    val gameType: String
 )
 
 interface RestApi {
@@ -121,9 +124,9 @@ class RestService {
         return status
     }
 
-    suspend fun inviteToGame(oponentId: String) {
+    suspend fun inviteToGame(oponentId: String, selectedGame: GameActivities) {
         val creatorId = UserSession.getInstance().user!!.id
-        val invitation = GameInvitation(oponentId, creatorId)
+        val invitation = GameInvitation(oponentId, creatorId, selectedGame.toString())
 
         api.inviteToGame(invitation)
     }
