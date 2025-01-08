@@ -51,6 +51,6 @@ class GameListActivity : AppActivity() {
 
     private fun startGame(game: GameActivities) {
         UserSession.getInstance().openGame(game)
-        ActivityHandler.getInstance().startActivity(this, Activity.GAME)
+        ActivityHandler.getInstance().startActivity(this, Activity.GAME_INVITATION)
     }
 }

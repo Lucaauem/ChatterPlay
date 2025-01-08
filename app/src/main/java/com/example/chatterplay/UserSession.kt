@@ -6,6 +6,7 @@ import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.communication.socket.SocketSerivce
 import com.example.chatterplay.game.Game
 import com.example.chatterplay.game.TicTacToe
+import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.activities.games.GameActivities
 import com.example.chatterplay.user.User
 import kotlinx.coroutines.async
@@ -31,6 +32,10 @@ class UserSession private constructor() {
     var chats = HashMap<String, Chatroom>()
         private set
     var selectedGame: Game? = null
+    var selectedGameAcitvity: GameActivities? = null
+    var currentGameId: String = ""
+
+    var mainActivity: MainActivity? = null
 
     fun logIn(user: User) {
         this.user = user
@@ -68,6 +73,7 @@ class UserSession private constructor() {
     }
 
     fun openGame(game: GameActivities) {
+        this.selectedGameAcitvity = game
         this.selectedGame = when(game) {
             GameActivities.CONNECT_FOUR -> FourConnect()
             GameActivities.TIC_TAC_TOE -> TicTacToe()

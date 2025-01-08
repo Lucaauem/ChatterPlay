@@ -33,6 +33,7 @@
         <activity android:name=".ui.activities.LoginActivity" />
         <activity android:name=".ui.activities.games.GameListActivity" />
         <activity android:name=".ui.activities.games.GameActivitiy" />
+        <activity android:name=".ui.activities.games.GameInvitationActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

@@ -6,5 +6,6 @@ enum class Activity {
     CHAT_LIST,
     CHAT,
     GAME,
+    GAME_INVITATION,
     GAME_LIST,
 }
