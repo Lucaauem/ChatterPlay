@@ -1,4 +1,4 @@
-package com.example.chatterplay.ui.activities
+package com.example.chatterplay.ui.activities.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.Chatroom
+import com.example.chatterplay.ui.activities.Activity
+import com.example.chatterplay.ui.activities.ActivityHandler
+import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpGoBackButton
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconButton
 

@@ -26,11 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.ChatlistActivity" />
-        <activity android:name=".ui.activities.ChatActivity" />
-        <activity android:name=".ui.activities.ChatCreationActivity" />
-        <activity android:name=".ui.activities.ChatJoinActivity" />
+        <activity android:name=".ui.activities.chat.ChatlistActivity" />
+        <activity android:name=".ui.activities.chat.ChatActivity" />
+        <activity android:name=".ui.activities.chat.ChatCreationActivity" />
+        <activity android:name=".ui.activities.chat.ChatJoinActivity" />
         <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".ui.activities.games.GameListActivity" />
+        <activity android:name=".ui.activities.games.GameActivitiy" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

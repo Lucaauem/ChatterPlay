@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                             )
                         ) {
                             CpBigButton(text = "Chatten", onClick = { openChats() })
-                            CpBigButton(text = "Spielen", onClick = { openGames() }, enabled = false)
+                            CpBigButton(text = "Spielen", onClick = { openGames() })
                         }
                         FlowRow(
                             modifier = Modifier
@@ -130,6 +130,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun openGames() {
-        // !TODO!
+        ActivityHandler.getInstance().startActivity(this, Activity.GAME_LIST)
     }
 }

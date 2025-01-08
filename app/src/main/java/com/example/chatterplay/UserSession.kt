@@ -1,8 +1,12 @@
 package com.example.chatterplay
 
+import FourConnect
 import com.example.chatterplay.chat.Chatroom
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.communication.socket.SocketSerivce
+import com.example.chatterplay.game.Game
+import com.example.chatterplay.game.TicTacToe
+import com.example.chatterplay.ui.activities.games.GameActivities
 import com.example.chatterplay.user.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -26,6 +30,7 @@ class UserSession private constructor() {
         private set
     var chats = HashMap<String, Chatroom>()
         private set
+    var selectedGame: Game? = null
 
     fun logIn(user: User) {
         this.user = user
@@ -60,5 +65,12 @@ class UserSession private constructor() {
 
     fun refreshChatlist() {
         this.loadChatRooms()
+    }
+
+    fun openGame(game: GameActivities) {
+        this.selectedGame = when(game) {
+            GameActivities.CONNECT_FOUR -> FourConnect()
+            GameActivities.TIC_TAC_TOE -> TicTacToe()
+        }
     }
 }

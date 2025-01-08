@@ -1,4 +1,4 @@
-package com.example.chatterplay.ui.activities
+package com.example.chatterplay.ui.activities.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.chatterplay.communication.RestService
+import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
