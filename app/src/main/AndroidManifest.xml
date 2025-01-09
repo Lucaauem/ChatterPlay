@@ -34,6 +34,7 @@
         <activity android:name=".ui.activities.games.GameListActivity" />
         <activity android:name=".ui.activities.games.GameActivitiy" />
         <activity android:name=".ui.activities.games.GameInvitationActivity" />
+        <activity android:name=".ui.activities.UserInformationActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

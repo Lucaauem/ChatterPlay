@@ -8,4 +8,5 @@ enum class Activity {
     GAME,
     GAME_INVITATION,
     GAME_LIST,
+    USER_INFORMATION
 }

@@ -34,11 +34,10 @@ import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.LoginActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
-import com.example.chatterplay.user.User
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.60a"
+        const val APP_VERSION = "0.70a"
     }
     override fun onStart() {
         super.onStart()
@@ -113,7 +112,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun UserIcon() {
         Button(
-            onClick = { TODO() },
+            onClick = { ActivityHandler.getInstance().startActivity(this, Activity.USER_INFORMATION) },
             modifier = Modifier
                 .size(85.dp)
                 .padding(top = 25.dp, end = 25.dp),

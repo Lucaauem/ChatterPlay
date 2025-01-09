@@ -24,13 +24,14 @@ class ActivityHandler {
 
     fun startActivity(source: ComponentActivity, target: Activity) {
         val targetClass = when (target){
-            Activity.CHAT_CREATE     -> ChatCreationActivity::class.java
-            Activity.CHAT_LIST       -> ChatlistActivity::class.java
-            Activity.CHAT_JOIN       -> ChatJoinActivity::class.java
-            Activity.CHAT            -> ChatActivity::class.java
-            Activity.GAME            -> GameActivitiy::class.java
-            Activity.GAME_INVITATION -> GameInvitationActivity::class.java
-            Activity.GAME_LIST       -> GameListActivity::class.java
+            Activity.CHAT_CREATE      -> ChatCreationActivity::class.java
+            Activity.CHAT_LIST        -> ChatlistActivity::class.java
+            Activity.CHAT_JOIN        -> ChatJoinActivity::class.java
+            Activity.CHAT             -> ChatActivity::class.java
+            Activity.GAME             -> GameActivitiy::class.java
+            Activity.GAME_INVITATION  -> GameInvitationActivity::class.java
+            Activity.GAME_LIST        -> GameListActivity::class.java
+            Activity.USER_INFORMATION -> UserInformationActivity::class.java
         }
 
         this.startActivity(source, targetClass)
