@@ -48,7 +48,7 @@ public class Chatroom {
         json.put("id", message.getId());
         json.put("chat", this.id);
         json.put("sender", message.getSender().getId());
-        json.put("senderName", message.getSender().getName());
+        json.put("senderName", message.getSender().getFirstName());
         json.put("content", message.getContent());
         json.put("timestamp", message.getTimestamp().getTime());
 
