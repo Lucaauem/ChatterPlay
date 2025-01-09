@@ -82,6 +82,22 @@ public class DatabaseHandler {
         );
     }
 
+    public void updateClient(Client client) {
+        try {
+            String sql = "UPDATE user SET first_name = ?, last_name = ?, origin = ? WHERE id = ?";
+            PreparedStatement preparedStatement = this.connect().prepareStatement(sql);
+
+            preparedStatement.setString(1, client.getFirstName());
+            preparedStatement.setString(2, client.getLastName());
+            preparedStatement.setString(3, client.getOrigin());
+            preparedStatement.setString(4, client.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            RestServer.log("Could not update client with id " + client.getId());
+        }
+    }
+
     public void removeClient(String clientId) {
         try {
             String sql = "DELETE FROM user WHERE id = ?";

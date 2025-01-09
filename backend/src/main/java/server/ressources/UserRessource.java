@@ -4,8 +4,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*;
-
 import java.io.IOException;
+import java.sql.Date;
 import server.RestServer;
 import server.client.Client;
 import server.client.ClientManager;
@@ -42,6 +42,21 @@ public class UserRessource extends ServerResource {
         ClientManager.getInstance().addClient(client);
 
         return RestServer.SOCKET_PORT;
+    }
+
+    @Put
+    public void update(Representation body) throws IOException, JSONException {
+        JSONObject json = new JSONObject(body.getText());
+        String userId = json.getString("id");
+
+        Client client = new Client(userId,
+                json.getString("firstName"),
+                json.getString("lastName"),
+                json.getString("origin"),
+                new Date(0) // Does not get updated
+        );
+
+        ClientManager.getInstance().updateClient(client);
     }
 
     @Delete

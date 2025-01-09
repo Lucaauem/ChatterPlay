@@ -35,6 +35,11 @@ public class ClientManager {
         return this.clients.get(id);
     }
 
+    public void updateClient(Client client) {
+        this.clients.put(client.getId(), client);
+        DatabaseHandler.getInstance().updateClient(client);
+    }
+
     public void removeClient(String id) {
         this.clients.remove(id);
         DatabaseHandler.getInstance().removeClient(id);
