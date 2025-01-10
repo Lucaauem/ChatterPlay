@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.chatterplay.UserSession
 import com.example.chatterplay.UserSession.Companion.getInstance
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.game.GameMode
@@ -79,14 +80,14 @@ class GameInvitationActivity : AppActivity() {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun invitePlayer(oponentId: String) {
+        getInstance().openGame(GameMode.ONLINE, 0)
         GlobalScope.launch {
             val req = async { RestService().inviteToGame(oponentId, getInstance().selectedGameAcitvity!!) }
         }
     }
 
     private fun startOfflineGame() {
-        val selectedGame = getInstance().selectedGameAcitvity!!
-        getInstance().openGame(selectedGame, GameMode.OFFLINE, 0)
+        getInstance().openGame(GameMode.OFFLINE, 0)
         ActivityHandler.getInstance().startActivity(getInstance().mainActivity!!, Activity.GAME)
     }
 }

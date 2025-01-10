@@ -1,6 +1,5 @@
 package com.example.chatterplay.game
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +18,7 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
     }
 
     abstract var state: SnapshotStateList<SnapshotStateList<Int>>
-    protected var hasTurn = true
+    protected var hasTurn = playerId == 0
     protected var finished by mutableStateOf(false)
     protected var winner = DEFAULT_WINNER // 0 when player has won. 1 when opponent has won
 
@@ -28,22 +27,34 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
             return
         }
 
-        val validMove = this.updateGameState(turn, this.playerId)
+        val gameUpdate = this.updateGameState(turn, this.playerId)
 
-        if(validMove && !this.finished) {
+        if(!(gameUpdate.elementAt(0) as Boolean)) {
+            return
+        }
+
+        if(this.mode == GameMode.ONLINE) {
+            sendTurnToServer(gameUpdate.elementAt(1) as String)
+        }
+        if(!this.finished) {
             this.hasTurn = false
             opponentMove()
         }
     }
 
-    abstract fun updateGameState(move: String, turnmakerId: Int) : Boolean
+    abstract fun updateGameState(move: String, turnmakerId: Int) : Set<Any>
 
     private fun opponentMove() {
         when(mode) {
             GameMode.OFFLINE -> { botTurn(); this.hasTurn = true }
             GameMode.LOCAL -> TODO()
-            GameMode.ONLINE -> TODO()
+            GameMode.ONLINE -> { }
         }
+    }
+
+    fun executeOnlinePlayerTurn(move: String, playerId: Int) {
+        this.updateGameState(move, playerId)
+        this.hasTurn = true
     }
 
     abstract fun botTurn()
@@ -59,7 +70,7 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
     fun sendTurnToServer(turn: String) {
         GlobalScope.launch {
             val gameId = UserSession.getInstance().currentGameId
-            RestService.getInstance().gameTurn(gameId, turn)
+            RestService.getInstance().gameTurn(gameId, turn, playerId)
         }
     }
 }

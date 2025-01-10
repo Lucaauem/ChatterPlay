@@ -3,7 +3,6 @@ package com.example.chatterplay.communication
 import android.util.Log
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.ChatMessage
-import com.example.chatterplay.game.Game
 import com.example.chatterplay.ui.activities.games.GameActivities
 import org.json.JSONObject
 import retrofit2.Retrofit
@@ -47,7 +46,8 @@ data class GameInvitation (
 
 data class GameTurn (
     val gameId: String,
-    val turn: String
+    val turn: String,
+    val playerId: Int
 )
 
 interface RestApi {
@@ -138,7 +138,7 @@ class RestService {
         api.inviteToGame(invitation)
     }
 
-    suspend fun gameTurn(gameId: String, turn: String) {
-        api.gameTurn(GameTurn(gameId, turn))
+    suspend fun gameTurn(gameId: String, turn: String, playerId: Int) {
+        api.gameTurn(GameTurn(gameId, turn, playerId))
     }
 }

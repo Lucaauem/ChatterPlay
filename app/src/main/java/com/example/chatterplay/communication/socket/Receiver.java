@@ -7,7 +7,6 @@ import com.example.chatterplay.game.GameMode;
 import com.example.chatterplay.ui.activities.Activity;
 import com.example.chatterplay.ui.activities.ActivityHandler;
 import com.example.chatterplay.ui.activities.games.GameActivities;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.DataInputStream;
@@ -34,6 +33,8 @@ public class Receiver extends Thread{
                     this.addMessage(data);
                 } else if(data.getString("type").equals("invite")) {
                     this.handleGameInvite(data);
+                } else if(data.getString("type").equals("gameMove")) {
+                    this.handleGameMove(data);
                 }
             } catch (Exception e) {
                 Log.e("DEBUG", e.toString());
@@ -63,9 +64,18 @@ public class Receiver extends Thread{
 
         if(!data.getString("creatorId").equals(UserSession.Companion.getInstance().getUser().getId())) {
             GameActivities gameType = GameActivities.valueOf(data.getString("gameType"));
-            UserSession.Companion.getInstance().openGame(gameType, GameMode.ONLINE, 0); // !TODO! Handle player id stuff
+            UserSession.Companion.getInstance().setSelectedGameAcitvity(gameType);
+            UserSession.Companion.getInstance().openGame(GameMode.ONLINE, 1);
         }
 
         ActivityHandler.Companion.getInstance().startActivity(UserSession.Companion.getInstance().getMainActivity(), Activity.GAME);
+    }
+
+    private void handleGameMove(JSONObject data) throws JSONException {
+        assert UserSession.Companion.getInstance().getSelectedGame() != null;
+
+        String playerMove = data.getString("move");
+        int playerId = data.getInt("playerId");
+        UserSession.Companion.getInstance().getSelectedGame().executeOnlinePlayerTurn(playerMove, playerId);
     }
 }

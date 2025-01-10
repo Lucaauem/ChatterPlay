@@ -20,7 +20,7 @@ public class GameRessource extends ServerResource {
         String oponentId = jsonBody.getString("oponentId");
         String creatorId = jsonBody.getString("creatorId");
         String gameType = jsonBody.getString("gameType");
-        String gameId = GameHandler.getInstance().createGame(GameType.valueOf(gameType));
+        String gameId = GameHandler.getInstance().createGame(GameType.valueOf(gameType), creatorId, oponentId);
 
         System.out.println(creatorId + " invited " + oponentId + " to " + gameType);
 
@@ -40,6 +40,6 @@ public class GameRessource extends ServerResource {
         String gameId = jsonBody.getString("gameId");
 
         GameInstance game = GameHandler.getInstance().getGame(gameId);
-        game.makeTurn(jsonBody.getString("turn"));
+        game.makeTurn(jsonBody.getString("turn"), jsonBody.getInt("playerId"));
     }
 }

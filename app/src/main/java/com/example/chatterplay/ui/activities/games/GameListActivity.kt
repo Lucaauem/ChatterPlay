@@ -51,7 +51,8 @@ class GameListActivity : AppActivity() {
     }
 
     private fun startGame(game: GameActivities) {
-        UserSession.getInstance().openGame(game, GameMode.OFFLINE, 0)
+        UserSession.getInstance().selectedGameAcitvity = game
+        UserSession.getInstance().openGame(GameMode.OFFLINE, 0)
         ActivityHandler.getInstance().startActivity(this, Activity.GAME_INVITATION)
     }
 }

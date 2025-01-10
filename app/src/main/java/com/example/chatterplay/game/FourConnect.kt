@@ -38,11 +38,11 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
         return outerList
     }
 
-    override fun updateGameState(move: String, turnmakerId: Int): Boolean {
+    override fun updateGameState(move: String, turnmakerId: Int): Set<Any> {
         val col = parseInt("" + move[0])
 
         if (col < 0 || col >= COLS) {
-            return false
+            return setOf(false, "")
         }
 
         for (r in ROWS - 1 downTo 0) {
@@ -56,10 +56,10 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
                 } else if (state.all { row -> row.all { it != -1 } }) {
                     this.finished = true
                 }
-                return true
+                return setOf(false, move)
             }
         }
-        return false
+        return setOf(false, "")
     }
 
     override fun botTurn() {

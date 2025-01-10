@@ -17,10 +17,10 @@ public class GameHandler {
         return instance;
     }
 
-    public String createGame(GameType gameType) {
+    public String createGame(GameType gameType, String creatorId, String oponentId) {
         String id = DatabaseHandler.generateId(6);
 
-        this.runningGames.put(id, new GameInstance(gameType));
+        this.runningGames.put(id, new GameInstance(gameType, creatorId, oponentId));
 
         return id;
     }

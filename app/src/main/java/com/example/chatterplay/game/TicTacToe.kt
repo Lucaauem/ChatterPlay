@@ -27,12 +27,12 @@ open class TicTacToe(gameMode: GameMode, playerId: Int) : Game(gameMode, playerI
         mutableStateListOf(-1, -1, -1)
     )
 
-    override fun updateGameState(move: String, turnmakerId: Int) : Boolean {
+    override fun updateGameState(move: String, turnmakerId: Int) : Set<Any> {
         val row = parseInt("" + move[0])
         val col = parseInt("" + move[1])
 
         if (this.state[row][col] != -1) {
-            return false
+            return setOf(false, "")
         }
 
         this.state[row][col] = turnmakerId
@@ -44,7 +44,7 @@ open class TicTacToe(gameMode: GameMode, playerId: Int) : Game(gameMode, playerI
             this.finished = true
         }
 
-        return true
+        return setOf(true, move)
     }
 
     // !TODO

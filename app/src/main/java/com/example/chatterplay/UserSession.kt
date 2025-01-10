@@ -72,9 +72,8 @@ class UserSession private constructor() {
         this.loadChatRooms()
     }
 
-    fun openGame(game: GameActivities, mode: GameMode, playerId: Int) {
-        this.selectedGameAcitvity = game
-        this.selectedGame = when(game) {
+    fun openGame(mode: GameMode, playerId: Int) {
+        this.selectedGame = when(this.selectedGameAcitvity!!) {
             GameActivities.CONNECT_FOUR -> FourConnect(mode, playerId)
             GameActivities.TIC_TAC_TOE -> TicTacToe(mode, playerId)
         }
