@@ -1,3 +1,4 @@
+package com.example.chatterplay.game
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -6,97 +7,95 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.chatterplay.game.Game
+import java.lang.Integer.parseInt
 
- class FourConnect : Game() {
-     private val rows = 6
-     private val cols = 7
+class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) {
+    companion object {
+        private const val ROWS = 6
+        private const val COLS = 7
+    }
 
-     private var _board = mutableStateListOf(
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' },
-         MutableList(cols) { ' ' }
-     )
+    override var state: SnapshotStateList<SnapshotStateList<Int>> = generateBoard()
 
-     private var _currentPlayer by mutableStateOf('X')
-     override val currentPlayer: Char
-         get() = _currentPlayer
+    private fun generateBoard(): SnapshotStateList<SnapshotStateList<Int>> {
+        val outerList = mutableStateListOf<SnapshotStateList<Int>>()
 
-     private var _winner by mutableStateOf<Char?>(null)
-     override val winner: Char?
-         get() = _winner
+        repeat(ROWS) {
+            val innerList = mutableStateListOf<Int>()
+            repeat(COLS) {
+                innerList.add(-1)
+            }
+            outerList.add(innerList)
+        }
 
-     private var isGameOver by mutableStateOf(false)
+        return outerList
+    }
 
-     override fun playMove(row: Int, col: Int): Boolean {
-         if (col < 0 || col >= cols || isGameOver) return false
+    override fun updateGameState(move: String, turnmakerId: Int): Boolean {
+        val col = parseInt("" + move[0])
 
-         for (r in rows - 1 downTo 0) {
-             if (_board[r][col] == ' ') {
-                 _board[r][col] = _currentPlayer
+        if (col < 0 || col >= COLS) {
+            return false
+        }
+
+        for (r in ROWS - 1 downTo 0) {
+            if (this.state[r][col] == -1) {
+                this.state[r][col] = turnmakerId
 
 
-                 if (checkWinner()) {
-                     _winner = _currentPlayer
-                     isGameOver = true
-                 } else if (_board.all { row -> row.all { it != ' ' } }) {
-                     isGameOver = true
-                 } else {
-                     _currentPlayer = if (_currentPlayer == 'X') 'O' else 'X'
-                 }
-                 return true
-             }
-         }
-         return false
-     }
+                if (checkWinner()) {
+                    this.winner = turnmakerId
+                    this.finished = true
+                } else if (state.all { row -> row.all { it != -1 } }) {
+                    this.finished = true
+                }
+                return true
+            }
+        }
+        return false
+    }
 
-     override fun resetGame() {
-         _board = mutableStateListOf(
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' },
-             MutableList(cols) { ' ' }
-         )
-         _currentPlayer = 'X'
-         _winner = null
-         isGameOver = false
-     }
+    override fun botTurn() {
+        var col = (0 until COLS).random()
 
-     override fun checkWinner(): Boolean {
-         for (r in 0 until rows) {
-             for (c in 0 until cols) {
-                 val player = _board[r][c]
-                 if (player != ' ' &&
-                     (checkDirection(r, c, 1, 0, player) || // Horizontal
-                             checkDirection(r, c, 0, 1, player) || // Vertical
-                             checkDirection(r, c, 1, 1, player) || // Diagonal (top-left to bottom-right)
-                             checkDirection(r, c, 1, -1, player))   // Diagonal (top-right to bottom-left)
-                 ) {
-                     return true
-                 }
-             }
-         }
-         return false
-     }
+        while (state[0][col] != -1) {
+            col = (0 until COLS).random()
+        }
 
-     private fun checkDirection(row: Int, col: Int, rowIncrement: Int, colIncrement: Int, player: Char): Boolean {
+        updateGameState(col.toString(), DEFAULT_BOT_ID)
+    }
+
+    override fun checkWinner(): Boolean {
+        for (r in 0 until ROWS) {
+            for (c in 0 until COLS) {
+                val player = state[r][c]
+                if (player != -1 &&
+                    (checkDirection(r, c, 1, 0, player) || // Horizontal
+                            checkDirection(r, c, 0, 1, player) || // Vertical
+                            checkDirection(r, c, 1, 1, player) || // Diagonal (top-left to bottom-right)
+                            checkDirection(r, c, 1, -1, player))   // Diagonal (top-right to bottom-left)
+                ) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+     private fun checkDirection(row: Int, col: Int, rowIncrement: Int, colIncrement: Int, player: Int): Boolean {
          var count = 0
          var currentRow = row
          var currentCol = col
 
-         while (currentRow in 0 until rows && currentCol in 0 until cols) {
-             if (_board[currentRow][currentCol] == player) {
+         while (currentRow in 0 until ROWS && currentCol in 0 until COLS) {
+             if (state[currentRow][currentCol] == player) {
                  count++
                  if (count >= 4) {
                      return true
@@ -109,10 +108,23 @@ import com.example.chatterplay.game.Game
          }
          return false
      }
-    override fun getBoard(): Array<CharArray> = _board.map { it.toCharArray() }.toTypedArray()
 
+    override fun resetGame() {
+        for(i in 0..<ROWS) {
+            for(j in 0..<COLS) {
+                this.state[i][j] = -1
+            }
+        }
+
+        this.winner = DEFAULT_WINNER
+        this.finished = false
+    }
+
+    // !FIXME! Wont update status text after win
     @Composable
     override fun GameUI() {
+        val currentPlayer = if (this.hasTurn) this.playerId else ((this.playerId + 1) % 2)
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -122,9 +134,9 @@ import com.example.chatterplay.game.Game
 
             Text(
                 text = when {
-                    winner != null -> "Player ${winner} Wins!"
-                    isGameOver -> "It's a Draw!"
-                    else -> "Player $currentPlayer's Turn"
+                    winner != DEFAULT_WINNER -> "Player ${winner + 1} Wins!"
+                    finished -> "It's a Draw!"
+                    else -> "Player ${currentPlayer + 1}'s Turn"
                 },
                 fontSize = 28.sp,
                 color = Color.Black,
@@ -141,9 +153,9 @@ import com.example.chatterplay.game.Game
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
             ) {
-                FourConnectBoard { col ->
-                    if (!isGameOver) {
-                        playMove(0, col)
+                FourConnectBoard(state) { col ->
+                    if (!finished) {
+                        playMove(col.toString())
                     }
                 }
 
@@ -157,9 +169,7 @@ import com.example.chatterplay.game.Game
     }
 
     @Composable
-    private fun FourConnectBoard(
-        onColumnClick: (Int) -> Unit
-    ) {
+    private fun FourConnectBoard(state: SnapshotStateList<SnapshotStateList<Int>>, onColumnClick: (Int) -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -171,12 +181,12 @@ import com.example.chatterplay.game.Game
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                for (row in _board.indices) {
+                for (row in state.indices) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        for (col in _board[row].indices) {
+                        for (col in state[row].indices) {
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
@@ -190,9 +200,9 @@ import com.example.chatterplay.game.Game
                                         .padding(2.dp)
                                 ) {
                                     drawCircle(
-                                        color = when (_board[row][col]) {
-                                            'X' -> Color.Red
-                                            'O' -> Color.Yellow
+                                        color = when (state[row][col]) {
+                                            0 -> Color.Red
+                                            1 -> Color.Yellow
                                             else -> Color.White
                                         },
                                         style = Fill

@@ -1,12 +1,12 @@
 package com.example.chatterplay
 
-import FourConnect
+import com.example.chatterplay.game.FourConnect
 import com.example.chatterplay.chat.Chatroom
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.communication.socket.SocketSerivce
 import com.example.chatterplay.game.Game
+import com.example.chatterplay.game.GameMode
 import com.example.chatterplay.game.TicTacToe
-import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.activities.games.GameActivities
 import com.example.chatterplay.user.User
 import kotlinx.coroutines.async
@@ -72,11 +72,11 @@ class UserSession private constructor() {
         this.loadChatRooms()
     }
 
-    fun openGame(game: GameActivities) {
+    fun openGame(game: GameActivities, mode: GameMode, playerId: Int) {
         this.selectedGameAcitvity = game
         this.selectedGame = when(game) {
-            GameActivities.CONNECT_FOUR -> FourConnect()
-            GameActivities.TIC_TAC_TOE -> TicTacToe()
+            GameActivities.CONNECT_FOUR -> FourConnect(mode, playerId)
+            GameActivities.TIC_TAC_TOE -> TicTacToe(mode, playerId)
         }
     }
 }

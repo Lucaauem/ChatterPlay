@@ -1,27 +1,65 @@
 package com.example.chatterplay.game
 
-
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-abstract class Game {
-    abstract val currentPlayer: Char
-    abstract val winner: Char?
-    abstract fun playMove(row: Int, col: Int): Boolean
-    abstract fun resetGame()
-    abstract fun getBoard(): Array<CharArray>
+abstract class Game(private val mode: GameMode, protected val playerId: Int) {
+    companion object {
+        const val DEFAULT_WINNER = -1
+        const val DEFAULT_BOT_ID = 1
+    }
+
+    abstract var state: SnapshotStateList<SnapshotStateList<Int>>
+    protected var hasTurn = true
+    protected var finished by mutableStateOf(false)
+    protected var winner = DEFAULT_WINNER // 0 when player has won. 1 when opponent has won
+
+    fun playMove(turn: String) {
+        if(!hasTurn) {
+            return
+        }
+
+        val validMove = this.updateGameState(turn, this.playerId)
+
+        if(validMove && !this.finished) {
+            this.hasTurn = false
+            opponentMove()
+        }
+    }
+
+    abstract fun updateGameState(move: String, turnmakerId: Int) : Boolean
+
+    private fun opponentMove() {
+        when(mode) {
+            GameMode.OFFLINE -> { botTurn(); this.hasTurn = true }
+            GameMode.LOCAL -> TODO()
+            GameMode.ONLINE -> TODO()
+        }
+    }
+
+    abstract fun botTurn()
+
     abstract fun checkWinner(): Boolean
+
+    abstract fun resetGame()
+
     @Composable
     abstract fun GameUI()
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun sendTurnToServer(turn: String) {
         GlobalScope.launch {
             val gameId = UserSession.getInstance().currentGameId
-            val req = async { RestService.getInstance().gameTurn(gameId, turn) }
+            RestService.getInstance().gameTurn(gameId, turn)
         }
     }
 }

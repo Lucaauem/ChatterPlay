@@ -3,6 +3,7 @@ package com.example.chatterplay.communication.socket;
 import android.util.Log;
 import com.example.chatterplay.UserSession;
 import com.example.chatterplay.chat.ChatMessage;
+import com.example.chatterplay.game.GameMode;
 import com.example.chatterplay.ui.activities.Activity;
 import com.example.chatterplay.ui.activities.ActivityHandler;
 import com.example.chatterplay.ui.activities.games.GameActivities;
@@ -62,7 +63,7 @@ public class Receiver extends Thread{
 
         if(!data.getString("creatorId").equals(UserSession.Companion.getInstance().getUser().getId())) {
             GameActivities gameType = GameActivities.valueOf(data.getString("gameType"));
-            UserSession.Companion.getInstance().openGame(gameType);
+            UserSession.Companion.getInstance().openGame(gameType, GameMode.ONLINE, 0); // !TODO! Handle player id stuff
         }
 
         ActivityHandler.Companion.getInstance().startActivity(UserSession.Companion.getInstance().getMainActivity(), Activity.GAME);

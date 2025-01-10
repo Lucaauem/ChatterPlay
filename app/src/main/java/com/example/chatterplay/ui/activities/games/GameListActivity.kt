@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.chatterplay.UserSession
+import com.example.chatterplay.game.GameMode
 import com.example.chatterplay.ui.activities.Activity
 import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.AppActivity
@@ -50,7 +51,7 @@ class GameListActivity : AppActivity() {
     }
 
     private fun startGame(game: GameActivities) {
-        UserSession.getInstance().openGame(game)
+        UserSession.getInstance().openGame(game, GameMode.OFFLINE, 0)
         ActivityHandler.getInstance().startActivity(this, Activity.GAME_INVITATION)
     }
 }
