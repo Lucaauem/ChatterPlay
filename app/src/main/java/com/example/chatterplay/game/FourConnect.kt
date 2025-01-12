@@ -41,22 +41,23 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
     override fun updateGameState(move: String, turnmakerId: Int): Set<Any> {
         val col = parseInt("" + move[0])
 
-        if (col < 0 || col >= COLS) {
+        if (col < 0 || col >= COLS || state[0][col] != -1) {
+            // Invalid move
             return setOf(false, "")
         }
 
         for (r in ROWS - 1 downTo 0) {
-            if (this.state[r][col] == -1) {
-                this.state[r][col] = turnmakerId
+            if (state[r][col] == -1) {
+                state[r][col] = turnmakerId
 
-
+                // Check for win or draw
                 if (checkWinner()) {
-                    this.winner = turnmakerId
-                    this.finished = true
+                    winner = turnmakerId
+                    finished = true
                 } else if (state.all { row -> row.all { it != -1 } }) {
-                    this.finished = true
+                    finished = true
                 }
-                return setOf(false, move)
+                return setOf(true, move)
             }
         }
         return setOf(false, "")
