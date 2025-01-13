@@ -18,12 +18,12 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
     }
 
     abstract var state: SnapshotStateList<SnapshotStateList<Int>>
-    protected var hasTurn = playerId == 0
+    protected var hasTurn = mutableStateOf(playerId == 0)
     protected var finished by mutableStateOf(false)
     protected var winner = DEFAULT_WINNER // 0 when player has won. 1 when opponent has won
 
     fun playMove(turn: String) {
-        if(!hasTurn) {
+        if(!hasTurn.value) {
             return
         }
 
@@ -36,8 +36,9 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
         if(this.mode == GameMode.ONLINE) {
             sendTurnToServer(gameUpdate.elementAt(1) as String)
         }
+
         if(!this.finished) {
-            this.hasTurn = false
+            this.hasTurn.value = false
             opponentMove()
         }
     }
@@ -46,7 +47,7 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
 
     private fun opponentMove() {
         when(mode) {
-            GameMode.OFFLINE -> { botTurn(); this.hasTurn = true }
+            GameMode.OFFLINE -> { botTurn(); this.hasTurn.value = true }
             GameMode.LOCAL -> TODO()
             GameMode.ONLINE -> { }
         }
@@ -54,7 +55,7 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
 
     fun executeOnlinePlayerTurn(move: String, playerId: Int) {
         this.updateGameState(move, playerId)
-        this.hasTurn = true
+        this.hasTurn.value = true
     }
 
     abstract fun botTurn()

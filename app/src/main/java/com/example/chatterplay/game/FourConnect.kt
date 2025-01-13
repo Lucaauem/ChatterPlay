@@ -117,6 +117,7 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
             }
         }
 
+        this.hasTurn.value = playerId == 0
         this.winner = DEFAULT_WINNER
         this.finished = false
     }
@@ -124,7 +125,8 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
     // !FIXME! Wont update status text after win
     @Composable
     override fun GameUI() {
-        val currentPlayer = if (this.hasTurn) this.playerId else ((this.playerId + 1) % 2)
+        val currentTurn by remember { this.hasTurn }
+        val currentPlayer = if (currentTurn) this.playerId else ((this.playerId + 1) % 2)
 
         Column(
             modifier = Modifier

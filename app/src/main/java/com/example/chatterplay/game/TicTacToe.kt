@@ -82,12 +82,14 @@ open class TicTacToe(gameMode: GameMode, playerId: Int) : Game(gameMode, playerI
     override fun resetGame() {
         this.state.forEach { row -> row.fill(-1) }
         this.winner = DEFAULT_WINNER
+        this.hasTurn.value = playerId == 0
         this.finished = false
     }
 
     @Composable
     override fun GameUI() {
-        val currentPlayerIcon = if (this.hasTurn) PLAYER_ICONS[this.playerId] else PLAYER_ICONS[(this.playerId + 1) % 2]
+        val currentTurn by remember { this.hasTurn }
+        val currentPlayerIcon = if (currentTurn) PLAYER_ICONS[this.playerId] else PLAYER_ICONS[(this.playerId + 1) % 2]
 
         Column(
             modifier = Modifier
