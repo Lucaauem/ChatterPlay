@@ -44,6 +44,21 @@ data class GameInvitation (
     val gameType: String
 )
 
+data class UserData (
+    val firstName: String,
+    val lastName: String,
+    val origin: String,
+    val joined: String,
+    val messages: Int
+)
+
+data class UserUpdate (
+    val id: String,
+    val firstName: String,
+    val lastName: String,
+    val origin: String
+)
+
 data class GameTurn (
     val gameId: String,
     val turn: String,
@@ -54,9 +69,11 @@ interface RestApi {
     @GET("test")
     suspend fun testConnection()
     @GET("user")
-    suspend fun getUser(@Query("id") userId: String) : Boolean
+    suspend fun getUser(@Query("id") userId: String) : UserData
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
+    @PUT("user")
+    suspend fun updateUser(@Body body: UserUpdate)
     @GET("chatroom")
     suspend fun getChatrooms(@Query("userId") userId : String): List<String>
     @GET("message")
@@ -94,9 +111,9 @@ class RestService {
     }
     private val api: RestApi = ServiceLocator.restApi
 
-    suspend fun getUser(id: String) : Boolean {
-        return api.getUser(id)
-    }
+    suspend fun getUser(id: String) : UserData { return api.getUser(id) }
+
+    suspend fun updatePlayer(data: UserUpdate) { api.updateUser(data) }
 
     suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms(UserSession.getInstance().user!!.id)[0]) }
 

@@ -37,7 +37,7 @@ import com.example.chatterplay.ui.theme.ChatterPlayTheme
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.80a"
+        const val APP_VERSION = "0.90a"
     }
     override fun onStart() {
         super.onStart()
@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun UserIcon() {
         Button(
-            onClick = { TODO() },
+            onClick = { ActivityHandler.getInstance().startActivity(this, Activity.USER_INFORMATION) },
             modifier = Modifier
                 .size(85.dp)
                 .padding(top = 25.dp, end = 25.dp),

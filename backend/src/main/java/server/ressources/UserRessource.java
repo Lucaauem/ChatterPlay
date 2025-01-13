@@ -26,7 +26,7 @@ public class UserRessource extends ServerResource {
         json.put("firstName", client.getFirstName());
         json.put("lastName", client.getLastName());
         json.put("origin", client.getOrigin());
-        json.put("joined", client.getJoined());
+        json.put("joined", client.getJoined().toString());
 
         return json.toString();
     }
@@ -55,6 +55,8 @@ public class UserRessource extends ServerResource {
                 json.getString("origin"),
                 new Date(0) // Does not get updated
         );
+
+        RestServer.log("Updated user with id " + userId + ": " + json.getString("firstName") + ", " + json.getString("lastName") + ", " + json.getString("origin"));
 
         ClientManager.getInstance().updateClient(client);
     }
