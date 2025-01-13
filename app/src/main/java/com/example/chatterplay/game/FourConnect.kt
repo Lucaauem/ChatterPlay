@@ -162,8 +162,13 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
                     }
                 }
 
-                Button(onClick = { resetGame() }) {
-                    Text("Reset Game")
+                if (finished && playerId == 0) {
+                    Button(onClick = {
+                        sendTurnToServer("_RESET")
+                        resetGame()
+                    }) {
+                        Text("Reset Game")
+                    }
                 }
             }
 

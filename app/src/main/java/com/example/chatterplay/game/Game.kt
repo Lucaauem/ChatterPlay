@@ -54,6 +54,11 @@ abstract class Game(private val mode: GameMode, protected val playerId: Int) {
     }
 
     fun executeOnlinePlayerTurn(move: String, playerId: Int) {
+        if(move == "_RESET") {
+            this.resetGame()
+            return
+        }
+
         this.updateGameState(move, playerId)
         this.hasTurn.value = true
     }

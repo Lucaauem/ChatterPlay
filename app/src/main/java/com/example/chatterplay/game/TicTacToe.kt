@@ -113,9 +113,12 @@ open class TicTacToe(gameMode: GameMode, playerId: Int) : Game(gameMode, playerI
                 playMove("" + row + col)
             }
 
-            if (finished) {
+            if (finished && playerId == 0) {
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { resetGame() }) {
+                Button(onClick = {
+                    sendTurnToServer("_RESET")
+                    resetGame()
+                }) {
                     Text("Reset Game")
                 }
             }
