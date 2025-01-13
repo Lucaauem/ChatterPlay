@@ -1,13 +1,12 @@
 package server.games;
 
 import server.database.DatabaseHandler;
-
 import java.util.HashMap;
 
 public class GameHandler {
-    private static GameHandler instance = new GameHandler();
+    private static GameHandler instance;
 
-    private HashMap<String, GameInstance> runningGames = new HashMap<>();
+    private final HashMap<String, GameInstance> runningGames = new HashMap<>();
 
     private GameHandler() {}
 
@@ -18,11 +17,15 @@ public class GameHandler {
         return instance;
     }
 
-    public String createGame() {
+    public String createGame(GameType gameType, String creatorId, String oponentId) {
         String id = DatabaseHandler.generateId(6);
 
-        this.runningGames.put(id, new GameInstance());
+        this.runningGames.put(id, new GameInstance(gameType, creatorId, oponentId));
 
         return id;
+    }
+
+    public GameInstance getGame(String id) {
+        return this.runningGames.get(id);
     }
 }

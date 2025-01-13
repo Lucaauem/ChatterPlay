@@ -37,7 +37,7 @@ import com.example.chatterplay.ui.theme.ChatterPlayTheme
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.70a"
+        const val APP_VERSION = "0.90a"
     }
     override fun onStart() {
         super.onStart()

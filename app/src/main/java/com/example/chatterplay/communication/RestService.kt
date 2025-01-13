@@ -59,6 +59,12 @@ data class UserUpdate (
     val origin: String
 )
 
+data class GameTurn (
+    val gameId: String,
+    val turn: String,
+    val playerId: Int
+)
+
 interface RestApi {
     @GET("test")
     suspend fun testConnection()
@@ -80,6 +86,8 @@ interface RestApi {
     suspend fun joinChatroom(@Query("user") userId: String, @Query("chatroom") chatId: String) : Boolean
     @POST("game")
     suspend fun inviteToGame(@Body body: GameInvitation)
+    @PUT("game")
+    suspend fun gameTurn(@Body body: GameTurn)
 }
 
 class RestService {
@@ -145,5 +153,9 @@ class RestService {
         val invitation = GameInvitation(oponentId, creatorId, selectedGame.toString())
 
         api.inviteToGame(invitation)
+    }
+
+    suspend fun gameTurn(gameId: String, turn: String, playerId: Int) {
+        api.gameTurn(GameTurn(gameId, turn, playerId))
     }
 }
