@@ -42,7 +42,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 class UserInformationActivity : AppActivity() {
-    private var data = mutableStateOf(UserData("", "", "", "", 0))
+    private var data = mutableStateOf(UserData("", "", "", "", "", 0))
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun refreshData() {

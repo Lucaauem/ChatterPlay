@@ -45,6 +45,7 @@ data class GameInvitation (
 )
 
 data class UserData (
+    val id: String,
     val firstName: String,
     val lastName: String,
     val origin: String,

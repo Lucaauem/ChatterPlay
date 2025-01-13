@@ -18,7 +18,14 @@ public class UserRessource extends ServerResource {
         Client client = DatabaseHandler.getInstance().getClient(clientId);
 
         if(client == null) {
-            return null;
+            JSONObject json = new JSONObject();
+            json.put("id", "-1");
+            json.put("firstName", "");
+            json.put("lastName", "");
+            json.put("origin", "");
+            json.put("joined", "");
+
+            return json.toString();
         }
 
         JSONObject json = new JSONObject();

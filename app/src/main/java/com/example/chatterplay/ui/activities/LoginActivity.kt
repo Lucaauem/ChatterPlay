@@ -135,8 +135,9 @@ class LoginActivity : AppActivity() {
     private fun searchUser(id: String) : Boolean {
         var userFound = false
         runBlocking {
-            val req = async { RestService.getInstance().getUser(id) }
-            userFound = req.await()
+            val req = async { RestService.getInstance().getUser(id)}
+            val user = req.await()
+            userFound = !user.equals("-1")
         }
         return userFound
     }
