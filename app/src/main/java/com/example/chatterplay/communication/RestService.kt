@@ -8,6 +8,7 @@ import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -73,6 +74,8 @@ interface RestApi {
     suspend fun getUser(@Query("id") userId: String) : UserData
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
+    @DELETE("user")
+    suspend fun logoutUser(@Query("id") userId: String)
     @PUT("user")
     suspend fun updateUser(@Body body: UserUpdate)
     @GET("chatroom")
@@ -119,6 +122,10 @@ class RestService {
     suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms(UserSession.getInstance().user!!.id)[0]) }
 
     suspend fun login(id: String): Int { return api.loginUser(UserLogin(id)) }
+
+    suspend fun logout() {
+        api.logoutUser(UserSession.getInstance().user!!.id)
+    }
 
     suspend fun loadMessages(chatId: String): ArrayList<ChatMessage> {
         val rawMessages = api.getMessages(chatId)

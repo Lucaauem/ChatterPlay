@@ -29,11 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.activities.Activity
 import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.LoginActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -49,6 +52,17 @@ class MainActivity : ComponentActivity() {
         }
 
         UserSession.getInstance().mainActivity = this
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if(UserSession.getInstance().isLoggedIn()) {
+            runBlocking {
+                val req = async { RestService.getInstance().logout() }
+                req.await()
+            }
+        }
     }
 
     @OptIn(ExperimentalLayoutApi::class)

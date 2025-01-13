@@ -69,8 +69,8 @@ public class UserRessource extends ServerResource {
     }
 
     @Delete
-    public void removeUser() {
+    public void logout() {
         String clientId = getQuery().getValues("id");
-        ClientManager.getInstance().removeClient(clientId);
+        ClientManager.getInstance().getClient(clientId).logout();
     }
 }

@@ -55,4 +55,9 @@ public class Client {
             System.err.println("Could not send message to client with id: " + this.id);
         }
     }
+
+    public void logout() {
+        this.outputStream = null;
+        RestServer.log("Client logged out with id: " + this.id);
+    }
 }
