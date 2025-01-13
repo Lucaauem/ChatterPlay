@@ -3,7 +3,6 @@ package com.example.chatterplay.communication
 import android.util.Log
 import com.example.chatterplay.UserSession
 import com.example.chatterplay.chat.ChatMessage
-import com.example.chatterplay.game.Game
 import com.example.chatterplay.ui.activities.games.GameActivities
 import org.json.JSONObject
 import retrofit2.Retrofit
@@ -13,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
+import java.sql.Date
 import java.sql.Timestamp
 
 data class UserLogin (
@@ -45,11 +45,19 @@ data class GameInvitation (
     val gameType: String
 )
 
+data class UserData (
+    val firstName: String,
+    val lastName: String,
+    val origin: String,
+    val joined: String,
+    val messages: Int
+)
+
 interface RestApi {
     @GET("test")
     suspend fun testConnection()
     @GET("user")
-    suspend fun getUser(@Query("id") userId: String) : Boolean
+    suspend fun getUser(@Query("id") userId: String) : UserData
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
     @GET("chatroom")
@@ -87,7 +95,7 @@ class RestService {
     }
     private val api: RestApi = ServiceLocator.restApi
 
-    suspend fun getUser(id: String) : Boolean {
+    suspend fun getUser(id: String) : UserData {
         return api.getUser(id)
     }
 

@@ -26,7 +26,7 @@ public class UserRessource extends ServerResource {
         json.put("firstName", client.getFirstName());
         json.put("lastName", client.getLastName());
         json.put("origin", client.getOrigin());
-        json.put("joined", client.getJoined());
+        json.put("joined", client.getJoined().toString());
 
         return json.toString();
     }

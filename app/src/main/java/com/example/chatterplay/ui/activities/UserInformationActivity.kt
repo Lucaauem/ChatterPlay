@@ -25,8 +25,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.chatterplay.R
+import com.example.chatterplay.UserSession
+import com.example.chatterplay.communication.RestService
+import com.example.chatterplay.communication.UserData
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpGoBackButton
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconButton
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class UserInformationActivity : AppActivity() {
     @OptIn(ExperimentalLayoutApi::class)
@@ -74,15 +82,28 @@ class UserInformationActivity : AppActivity() {
 
     @Composable
     private fun UserData() {
-        val tableData = hashMapOf(
-            "Vorname"     to "Luca",
-            "Nachname"    to "Außem",
-            "Ort"         to "Düren",
-            "Beigetreten" to "Oktober 2024"
+        val data: UserData
+        runBlocking {
+            val req = async { RestService.getInstance().getUser(UserSession.getInstance().user!!.id) }
+            data = req.await()
+        }
+
+        // Format date
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        val outputFormatter = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
+        outputFormatter.timeZone = TimeZone.getDefault()
+        val formattedDate = outputFormatter.format(sdf.parse(data.joined)!!)
+
+        val tableData = linkedMapOf(
+            "Vorname"     to data.firstName,
+            "Nachname"    to data.lastName,
+            "Ort"         to data.origin,
+            "Beigetreten" to formattedDate
         )
         val keys: Array<String> = tableData.keys.toTypedArray()
 
-        LazyColumn(Modifier.padding(0.dp).fillMaxWidth(0.6f)) {
+        LazyColumn(Modifier.padding(0.dp).fillMaxWidth(0.625f)) {
             items(tableData.size) { index ->
                 Row(Modifier.fillMaxWidth()) {
                     TableCell(
@@ -91,7 +112,7 @@ class UserInformationActivity : AppActivity() {
                         modifier = Modifier.fillMaxWidth(0.4f)
                     )
                     TableCell(
-                        text = tableData[keys[index]]!!,
+                        text = tableData[keys[index]]!!.toString(),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
