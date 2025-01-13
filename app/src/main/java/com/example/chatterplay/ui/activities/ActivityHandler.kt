@@ -6,6 +6,7 @@ import com.example.chatterplay.ui.activities.chat.ChatActivity
 import com.example.chatterplay.ui.activities.chat.ChatCreationActivity
 import com.example.chatterplay.ui.activities.chat.ChatJoinActivity
 import com.example.chatterplay.ui.activities.chat.ChatlistActivity
+import com.example.chatterplay.ui.activities.games.EditUserActivity
 import com.example.chatterplay.ui.activities.games.GameInvitationActivity
 import com.example.chatterplay.ui.activities.games.GameActivitiy
 import com.example.chatterplay.ui.activities.games.GameListActivity
@@ -31,6 +32,7 @@ class ActivityHandler {
             Activity.GAME             -> GameActivitiy::class.java
             Activity.GAME_INVITATION  -> GameInvitationActivity::class.java
             Activity.GAME_LIST        -> GameListActivity::class.java
+            Activity.USER_EDIT        -> EditUserActivity::class.java
             Activity.USER_INFORMATION -> UserInformationActivity::class.java
         }
 

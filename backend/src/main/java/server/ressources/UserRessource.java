@@ -56,6 +56,8 @@ public class UserRessource extends ServerResource {
                 new Date(0) // Does not get updated
         );
 
+        RestServer.log("Updated user with id " + userId + ": " + json.getString("firstName") + ", " + json.getString("lastName") + ", " + json.getString("origin"));
+
         ClientManager.getInstance().updateClient(client);
     }
 

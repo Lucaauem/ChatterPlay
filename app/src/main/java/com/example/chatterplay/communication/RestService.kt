@@ -12,7 +12,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
-import java.sql.Date
 import java.sql.Timestamp
 
 data class UserLogin (
@@ -53,6 +52,13 @@ data class UserData (
     val messages: Int
 )
 
+data class UserUpdate (
+    val id: String,
+    val firstName: String,
+    val lastName: String,
+    val origin: String
+)
+
 interface RestApi {
     @GET("test")
     suspend fun testConnection()
@@ -60,6 +66,8 @@ interface RestApi {
     suspend fun getUser(@Query("id") userId: String) : UserData
     @POST("user")
     suspend fun loginUser(@Body body: UserLogin) : Int
+    @PUT("user")
+    suspend fun updateUser(@Body body: UserUpdate)
     @GET("chatroom")
     suspend fun getChatrooms(@Query("userId") userId : String): List<String>
     @GET("message")
@@ -95,9 +103,9 @@ class RestService {
     }
     private val api: RestApi = ServiceLocator.restApi
 
-    suspend fun getUser(id: String) : UserData {
-        return api.getUser(id)
-    }
+    suspend fun getUser(id: String) : UserData { return api.getUser(id) }
+
+    suspend fun updatePlayer(data: UserUpdate) { api.updateUser(data) }
 
     suspend fun loadChatrooms(): JSONObject { return JSONObject(api.getChatrooms(UserSession.getInstance().user!!.id)[0]) }
 

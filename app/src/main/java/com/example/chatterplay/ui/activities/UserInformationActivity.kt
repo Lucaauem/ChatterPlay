@@ -19,6 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,13 +33,30 @@ import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.communication.UserData
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpGoBackButton
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconButton
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
 class UserInformationActivity : AppActivity() {
+    private var data = mutableStateOf(UserData("", "", "", "", 0))
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun refreshData() {
+        GlobalScope.launch {
+            val req = async { RestService.getInstance().getUser(UserSession.getInstance().user!!.id) }
+            data.value = req.await()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.refreshData()
+    }
+
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Render() {
@@ -82,11 +102,7 @@ class UserInformationActivity : AppActivity() {
 
     @Composable
     private fun UserData() {
-        val data: UserData
-        runBlocking {
-            val req = async { RestService.getInstance().getUser(UserSession.getInstance().user!!.id) }
-            data = req.await()
-        }
+        val data by remember { this.data }
 
         // Format date
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
@@ -135,6 +151,6 @@ class UserInformationActivity : AppActivity() {
     }
 
     private fun editUserData() {
-        // !TODO!
+        ActivityHandler.getInstance().startActivity(this, Activity.USER_EDIT)
     }
 }
