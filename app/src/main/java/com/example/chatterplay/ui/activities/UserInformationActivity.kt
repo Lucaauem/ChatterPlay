@@ -1,72 +1,98 @@
 package com.example.chatterplay.ui.activities
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.chatterplay.ui.components.buttons.CpButtons
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import com.example.chatterplay.R
+import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpGoBackButton
+import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconButton
 
 class UserInformationActivity : AppActivity() {
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Render() {
+        Box(modifier = Modifier.fillMaxSize().padding(start = 10.dp)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(5.dp, alignment = Alignment.End),
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 10.dp, bottom = 10.dp, top = 10.dp)
+            ) {
+                CpGoBackButton(activity = this@UserInformationActivity)
+                Spacer(Modifier.weight(1f))
+                CpIconButton(
+                    icon = Icons.Default.Edit,
+                    onClick = { editUserData() },
+                    description = "Edit Account Data"
+                )
+            }
+
+        }
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .offset(y = (-85).dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row {
-                CpButtons.CpGoBackButton(activity = this@UserInformationActivity)
-                Spacer(modifier = Modifier.weight(1f))
-            }
             UserIcon()
+            Spacer(modifier = Modifier.height(25.dp))
             UserData()
         }
     }
 
     @Composable
     private fun UserIcon() {
-        // !TODO!
+        Image(
+            painter = painterResource(id = R.drawable.placeholder),
+            contentDescription = "Account Image",
+            modifier = Modifier.size(200.dp)
+        )
     }
 
     @Composable
     private fun UserData() {
         val tableData = hashMapOf(
-            "Vorname" to "Luca",
-            "Nachname" to "Außem",
-            "Herkunft" to "Düren",
+            "Vorname"     to "Luca",
+            "Nachname"    to "Außem",
+            "Ort"         to "Düren",
             "Beigetreten" to "Oktober 2024"
-
         )
         val keys: Array<String> = tableData.keys.toTypedArray()
 
-        val column1Weight = .3f
-        val column2Weight = .7f
-
-        LazyColumn(Modifier.padding(0.dp)) {
+        LazyColumn(Modifier.padding(0.dp).fillMaxWidth(0.6f)) {
             items(tableData.size) { index ->
                 Row(Modifier.fillMaxWidth()) {
                     TableCell(
                         text = keys[index],
-                        weight = column1Weight,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth(0.4f)
                     )
                     TableCell(
                         text = tableData[keys[index]]!!,
-                        weight = column2Weight
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -74,9 +100,8 @@ class UserInformationActivity : AppActivity() {
     }
 
     @Composable
-    fun RowScope.TableCell(
+    private fun TableCell(
         text: String,
-        weight: Float,
         modifier: Modifier = Modifier,
         fontWeight: FontWeight = FontWeight.Normal
     ) {
@@ -84,8 +109,11 @@ class UserInformationActivity : AppActivity() {
             text = text,
             fontWeight = fontWeight,
             modifier = modifier
-                .weight(weight)
                 .padding(8.dp)
         )
+    }
+
+    private fun editUserData() {
+        // !TODO!
     }
 }
