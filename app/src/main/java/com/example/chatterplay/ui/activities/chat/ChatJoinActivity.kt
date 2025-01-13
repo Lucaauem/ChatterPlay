@@ -31,17 +31,18 @@ import kotlinx.coroutines.runBlocking
 
 class ChatJoinActivity : AppActivity() {
     private fun joinChatroom(chatId: String) : Boolean {
+        var chatFound = false
         runBlocking {
             val req = async { RestService.getInstance().joinChatroom(chatId) }
             val status : Boolean = req.await()
 
             if(status) {
                 finish()
+                chatFound = true
             }
-
         }
 
-        return false
+        return chatFound
     }
 
     @OptIn(ExperimentalLayoutApi::class)
