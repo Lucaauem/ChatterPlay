@@ -48,11 +48,20 @@ public class Client {
         RestServer.log("Client logged in with id: " + this.id);
     }
 
+    public boolean isLoggedIn() {
+        return this.outputStream != null;
+    }
+
     public void sendMessage(JSONObject content) {
         try {
             this.outputStream.writeUTF(content.toString());
         } catch (Exception e) {
             System.err.println("Could not send message to client with id: " + this.id);
         }
+    }
+
+    public void logout() {
+        this.outputStream = null;
+        RestServer.log("Client logged out with id: " + this.id);
     }
 }

@@ -37,16 +37,27 @@ class UserSession private constructor() {
 
     var mainActivity: MainActivity? = null
 
-    fun logIn(user: User) {
-        this.user = user
+    fun logIn(user: User) : Boolean {
+        var canConnect = true
+
         runBlocking {
             val req = async { RestService.getInstance().login(user.id) }
             val socketPort = req.await()
 
-            val socketServce = SocketSerivce(socketPort)
-            socketServce.start()
+            canConnect = socketPort != -1
+
+            if(canConnect) {
+                val socketServce = SocketSerivce(socketPort)
+                socketServce.start()
+            }
         }
-        this.loadChatRooms()
+
+        if(canConnect) {
+            this.user = user
+            this.loadChatRooms()
+        }
+
+        return canConnect
     }
 
     fun isLoggedIn() : Boolean {
