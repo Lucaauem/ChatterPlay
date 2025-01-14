@@ -145,7 +145,7 @@ class LoginActivity : AppActivity() {
         runBlocking {
             val req = async { RestService.getInstance().getUser(id)}
             val user = req.await()
-            userFound = !user.equals("-1")
+            userFound = user.id != "-1"
         }
         return userFound
     }
