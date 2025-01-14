@@ -39,6 +39,8 @@ class LoginActivity : AppActivity() {
 
         var ipAddressInput by remember { mutableStateOf("") }
         var couldConnectToServer by remember { mutableStateOf(true) }
+        var userIsAlreadyLoggedIn by remember { mutableStateOf(false) }
+
 
         Column(
             modifier = Modifier
@@ -53,7 +55,7 @@ class LoginActivity : AppActivity() {
                 onValueChange = { userIdInput = it },
                 label = { Text("Nutzer-ID") },
                 supportingText = {
-                    if(!userExists) {
+                    if(!userExists || userIsAlreadyLoggedIn) {
                         Text(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -61,7 +63,7 @@ class LoginActivity : AppActivity() {
                                 .padding(top = 3.dp, bottom = 10.dp),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            text = "Nutzer nicht gefunden!",
+                            text = if (userIsAlreadyLoggedIn) "Nutzer bereits angemeldet!" else "Nutzer nicht gefunden!",
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -102,19 +104,25 @@ class LoginActivity : AppActivity() {
                     userExists = userFound
                     if(!userFound) { return@CpMediumButton }
 
-                    login(userIdInput)
+                    // Check if user is logged in
+                    userIsAlreadyLoggedIn = !login(userIdInput)
                 },
                 enabled = ipAddressInput.isNotEmpty() && userIdInput.isNotEmpty()
             )
         }
     }
 
-    private fun login(id: String) {
+    private fun login(id: String) : Boolean {
         val session = UserSession.getInstance()
-        session.logIn(User(id))
-        val i = Intent(this, MainActivity::class.java)
-        finish()
-        startActivity(i)
+        val canConnect = session.logIn(User(id))
+
+        if(canConnect) {
+            val i = Intent(this, MainActivity::class.java)
+            finish()
+            startActivity(i)
+        }
+
+        return canConnect
     }
 
     private fun connectToServer(ipAddress: String) : Boolean {

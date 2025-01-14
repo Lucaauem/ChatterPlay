@@ -43,6 +43,10 @@ public class UserRessource extends ServerResource {
         JSONObject json = new JSONObject(body.getText());
         String userId = json.getString("id");
 
+        if(ClientManager.getInstance().getClient(userId) != null && ClientManager.getInstance().getClient(userId).isLoggedIn()) {
+            return -1;
+        }
+
         // !TODO! Login process with name and password
 
         Client client = new Client(userId);

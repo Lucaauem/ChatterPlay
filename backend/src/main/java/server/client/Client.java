@@ -48,6 +48,10 @@ public class Client {
         RestServer.log("Client logged in with id: " + this.id);
     }
 
+    public boolean isLoggedIn() {
+        return this.outputStream != null;
+    }
+
     public void sendMessage(JSONObject content) {
         try {
             this.outputStream.writeUTF(content.toString());
