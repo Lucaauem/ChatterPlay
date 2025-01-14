@@ -1,5 +1,6 @@
 package com.example.chatterplay.ui.activities.games
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -38,6 +39,8 @@ class EditUserActivity : AppActivity() {
         runBlocking {
             val req = async { RestService.getInstance().getUser(UserSession.getInstance().user!!.id) }
             data = req.await()
+
+            Log.i("DEBUG", data.joined)
         }
 
         Box(modifier = Modifier.fillMaxSize()) {

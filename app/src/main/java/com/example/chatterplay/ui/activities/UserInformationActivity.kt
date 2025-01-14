@@ -1,5 +1,6 @@
 package com.example.chatterplay.ui.activities
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +43,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 class UserInformationActivity : AppActivity() {
-    private var data = mutableStateOf(UserData("", "", "", "", "", 0))
+    private var data = mutableStateOf(UserData("", "", "", "", ""))
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun refreshData() {
@@ -104,12 +105,14 @@ class UserInformationActivity : AppActivity() {
     private fun UserData() {
         val data by remember { this.data }
 
+        Log.i("DEBUG", data.joined)
         // Format date
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         val outputFormatter = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
         outputFormatter.timeZone = TimeZone.getDefault()
         val formattedDate = outputFormatter.format(sdf.parse(data.joined)!!)
+
 
         val tableData = linkedMapOf(
             "Vorname"     to data.firstName,

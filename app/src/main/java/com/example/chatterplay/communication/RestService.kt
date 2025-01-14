@@ -50,8 +50,7 @@ data class UserData (
     val firstName: String,
     val lastName: String,
     val origin: String,
-    val joined: String,
-    val messages: Int
+    val joined: String
 )
 
 data class UserUpdate (
