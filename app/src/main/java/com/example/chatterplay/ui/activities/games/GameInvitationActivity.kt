@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.chatterplay.UserSession
 import com.example.chatterplay.UserSession.Companion.getInstance
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.game.GameMode
@@ -28,7 +27,6 @@ import com.example.chatterplay.ui.activities.Activity
 import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons
-import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
