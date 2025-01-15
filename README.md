@@ -6,7 +6,7 @@
 
    1.1 Use `docs/chatterplay.sql` to initialize the database
 
-   1.2 Enter the database credentials in `backend/src/main/resources/db.env`
+   1.2 Enter the database credentials in `backend/src/main/resources/db.env` (example for the URL: jdbc:mysql://localhost:3306/chatterplay)
 
    1.3 The database contains some example data
 
