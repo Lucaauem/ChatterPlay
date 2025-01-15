@@ -47,14 +47,14 @@ open class TicTacToe(gameMode: GameMode, playerId: Int) : Game(gameMode, playerI
         return setOf(true, move)
     }
 
-    // !TODO
     override fun botTurn() {
-        for (row in 0..2) {
-            for (col in 0..2) {
-                if (state[row][col] == -1) {
-                    updateGameState("" + row + col, DEFAULT_BOT_ID)
-                    return
-                }
+        while (true) {
+            val row = (0..2).random()
+            val col = (0..2).random()
+
+            if (state[row][col] == -1) {
+                updateGameState("$row$col", DEFAULT_BOT_ID)
+                return
             }
         }
     }
@@ -88,6 +88,7 @@ open class TicTacToe(gameMode: GameMode, playerId: Int) : Game(gameMode, playerI
 
     @Composable
     override fun GameUI() {
+
         val currentTurn by remember { this.hasTurn }
         val currentPlayerIcon = if (currentTurn) PLAYER_ICONS[this.playerId] else PLAYER_ICONS[(this.playerId + 1) % 2]
 
