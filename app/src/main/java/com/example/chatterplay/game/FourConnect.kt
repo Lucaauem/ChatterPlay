@@ -122,7 +122,6 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
         this.finished = false
     }
 
-    // !FIXME! Wont update status text after win
     @Composable
     override fun GameUI() {
         val currentTurn by remember { this.hasTurn }
@@ -164,7 +163,9 @@ class FourConnect(gameMode: GameMode, playerId: Int) : Game(gameMode, playerId) 
 
                 if (finished && playerId == 0) {
                     Button(onClick = {
-                        sendTurnToServer("_RESET")
+                        if(mode == GameMode.ONLINE) {
+                            sendTurnToServer("_RESET")
+                        }
                         resetGame()
                     }) {
                         Text("Reset Game")

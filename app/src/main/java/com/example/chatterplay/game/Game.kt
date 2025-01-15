@@ -11,7 +11,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-abstract class Game(private val mode: GameMode, protected val playerId: Int) {
+abstract class Game(protected val mode: GameMode, protected val playerId: Int) {
     companion object {
         const val DEFAULT_WINNER = -1
         const val DEFAULT_BOT_ID = 1

@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,9 +65,10 @@ class ChatMessage(val id: String, sender: String, private val senderName: String
     fun MessageContent(isOwnMessage: Boolean, isPreviousSender: Boolean) {
         if(!(isOwnMessage || isPreviousSender)) {
             Text(
-                text = senderName,
+                text = senderName.ifEmpty { "Anonym" },
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
+                fontStyle = if (senderName.isEmpty()) FontStyle.Italic else FontStyle.Normal,
                 fontSize = 17.sp
             )
         }
