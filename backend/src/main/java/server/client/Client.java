@@ -54,7 +54,9 @@ public class Client {
 
     public void sendMessage(JSONObject content) {
         try {
-            this.outputStream.writeUTF(content.toString());
+            if(this.isLoggedIn()) {
+                this.outputStream.writeUTF(content.toString());
+            }
         } catch (Exception e) {
             System.err.println("Could not send message to client with id: " + this.id);
         }
