@@ -36,6 +36,10 @@ import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpGoBackButton
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconButton
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class ChatlistActivity : AppActivity() {
     private val chats = mutableStateOf(listOf<Chatroom>())
@@ -53,11 +57,15 @@ class ChatlistActivity : AppActivity() {
         ActivityHandler.getInstance().startActivity(this, Activity.CHAT_JOIN)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onResume() {
         super.onResume()
 
-        UserSession.getInstance().refreshChatlist()
-        this.chats.value = UserSession.getInstance().chats.values.toMutableList()
+        GlobalScope.launch {
+            val req = async { UserSession.getInstance().refreshChatlist() }
+            req.await()
+            chats.value = UserSession.getInstance().chats.values.toMutableList()
+        }
     }
 
     @OptIn(ExperimentalLayoutApi::class)

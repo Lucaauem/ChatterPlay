@@ -21,8 +21,10 @@ import androidx.compose.ui.unit.dp
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 
 class ChatCreationActivity : AppActivity() {
     @OptIn(ExperimentalLayoutApi::class)
@@ -63,8 +65,9 @@ class ChatCreationActivity : AppActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun createChatroom(name: String) {
-        runBlocking {
+        GlobalScope.launch {
             val req = async { RestService().createChatroom(name) }
             req.await()
             finish()

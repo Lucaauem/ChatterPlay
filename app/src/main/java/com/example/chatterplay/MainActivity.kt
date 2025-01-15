@@ -35,12 +35,14 @@ import com.example.chatterplay.ui.activities.ActivityHandler
 import com.example.chatterplay.ui.activities.LoginActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpBigButton
 import com.example.chatterplay.ui.theme.ChatterPlayTheme
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.90b"
+        const val APP_VERSION = "0.90c"
     }
     override fun onStart() {
         super.onStart()
@@ -54,13 +56,15 @@ class MainActivity : ComponentActivity() {
         UserSession.getInstance().mainActivity = this
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onDestroy() {
         super.onDestroy()
 
         if(UserSession.getInstance().isLoggedIn()) {
-            runBlocking {
+            GlobalScope.launch {
                 val req = async { RestService.getInstance().logout() }
                 req.await()
+                UserSession.getInstance().logout()
             }
         }
     }

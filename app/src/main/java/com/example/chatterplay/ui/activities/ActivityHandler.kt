@@ -6,7 +6,6 @@ import com.example.chatterplay.ui.activities.chat.ChatActivity
 import com.example.chatterplay.ui.activities.chat.ChatCreationActivity
 import com.example.chatterplay.ui.activities.chat.ChatJoinActivity
 import com.example.chatterplay.ui.activities.chat.ChatlistActivity
-import com.example.chatterplay.ui.activities.games.EditUserActivity
 import com.example.chatterplay.ui.activities.games.GameInvitationActivity
 import com.example.chatterplay.ui.activities.games.GameActivitiy
 import com.example.chatterplay.ui.activities.games.GameListActivity

@@ -25,22 +25,28 @@ import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import com.example.chatterplay.user.User
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 
 class LoginActivity : AppActivity() {
+    private var couldConnectToServer = mutableStateOf(true)
+    private var userIsAlreadyLoggedIn = mutableStateOf(false)
+    private var userExists = mutableStateOf(true)
+
     @Composable
     override fun Render() {
         var userIdInput by remember { mutableStateOf("") }
-        var userExists by remember { mutableStateOf(true) }
-
         var ipAddressInput by remember { mutableStateOf("") }
-        var couldConnectToServer by remember { mutableStateOf(true) }
-        var userIsAlreadyLoggedIn by remember { mutableStateOf(false) }
 
+        val userExists by remember { this.userExists }
+        val couldConnectToServer by remember { this.couldConnectToServer }
+        val userIsAlreadyLoggedIn by remember { this.userIsAlreadyLoggedIn }
 
         Column(
             modifier = Modifier
@@ -91,28 +97,34 @@ class LoginActivity : AppActivity() {
             )
             CpMediumButton(
                 text = "Anmelden",
-                onClick = {
-                    // Check if server is found
-                    val serverConnection : Boolean = connectToServer(ipAddressInput)
-                    couldConnectToServer = serverConnection
-                    if(!serverConnection) { return@CpMediumButton }
-
-                    UserSession.IP = ipAddressInput
-
-                    // Check if user is found
-                    val userFound : Boolean = searchUser(userIdInput)
-                    userExists = userFound
-                    if(!userFound) { return@CpMediumButton }
-
-                    // Check if user is logged in
-                    userIsAlreadyLoggedIn = !login(userIdInput)
-                },
+                onClick = { establishConnection(ipAddressInput, userIdInput) },
                 enabled = ipAddressInput.isNotEmpty() && userIdInput.isNotEmpty()
             )
         }
     }
 
-    private fun login(id: String) : Boolean {
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun establishConnection(ipAddressInput: String, userIdInput: String) {
+        GlobalScope.launch {
+            // Check if server is found
+            val serverConnection : Boolean = connectToServer(ipAddressInput)
+            couldConnectToServer.value = serverConnection
+            if(!serverConnection) { return@launch }
+
+            UserSession.IP = ipAddressInput
+
+            // Check if user is found
+            val userFound : Boolean = searchUser(userIdInput)
+            userExists.value = userFound
+            if(!userFound) { return@launch }
+
+            // Check if user is logged in
+            userIsAlreadyLoggedIn.value = !login(userIdInput)
+
+        }
+    }
+
+    private suspend fun login(id: String) : Boolean {
         val session = UserSession.getInstance()
         val canConnect = session.logIn(User(id))
 
@@ -125,18 +137,16 @@ class LoginActivity : AppActivity() {
         return canConnect
     }
 
-    private fun connectToServer(ipAddress: String) : Boolean {
-        return runBlocking {
-            try {
-                withTimeout(3500L) {
-                    withContext(Dispatchers.IO) {
-                        RestService.testConnection(ipAddress)
-                    }
-                    true
+    private suspend fun connectToServer(ipAddress: String) : Boolean {
+        return try {
+            withTimeout(3500L) {
+                withContext(Dispatchers.IO) {
+                    RestService.testConnection(ipAddress)
                 }
-            } catch (e: Exception) {
-                false
+                true
             }
+        } catch (e: Exception) {
+            false
         }
     }
 

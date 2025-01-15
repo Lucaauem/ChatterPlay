@@ -38,9 +38,10 @@ import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpIconBackgroundButton
 import com.example.chatterplay.ui.theme.RwthBlueMedium
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class Chatroom(id: String, name: String) {
     var name: String = name
@@ -53,8 +54,9 @@ class Chatroom(id: String, name: String) {
         this.loadRoomMessages()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun loadRoomMessages() {
-        runBlocking {
+        GlobalScope.launch {
             val req = async { RestService.getInstance().loadMessages(id) }
             val messageList = req.await()
 
@@ -85,8 +87,9 @@ class Chatroom(id: String, name: String) {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun sendMessage(input: String) {
-        runBlocking {
+        GlobalScope.launch {
             val req = async { RestService.getInstance().sendMessage(id, UserSession.getInstance().user!!.id, input) }
             req.await()
         }

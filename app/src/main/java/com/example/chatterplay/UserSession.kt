@@ -9,8 +9,10 @@ import com.example.chatterplay.game.GameMode
 import com.example.chatterplay.game.TicTacToe
 import com.example.chatterplay.ui.activities.games.GameActivities
 import com.example.chatterplay.user.User
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 
 class UserSession private constructor() {
     companion object {
@@ -37,10 +39,11 @@ class UserSession private constructor() {
 
     var mainActivity: MainActivity? = null
 
-    fun logIn(user: User) : Boolean {
+    @OptIn(DelicateCoroutinesApi::class)
+    suspend fun logIn(user: User) : Boolean {
         var canConnect = true
 
-        runBlocking {
+        GlobalScope.launch {
             val req = async { RestService.getInstance().login(user.id) }
             val socketPort = req.await()
 
@@ -64,13 +67,14 @@ class UserSession private constructor() {
         return this.user != null
     }
 
-    private fun loadChatRooms() {
-        runBlocking {
-            val res = async { RestService.getInstance().loadChatrooms() }
-            val json = res.await()
+    fun logout() {
+        this.user = null
+    }
 
-            json.keys().forEach { chats[it] = Chatroom(it, json.getString(it)) }
-        }
+    private suspend fun loadChatRooms() {
+        val json =  RestService.getInstance().loadChatrooms()
+
+        json.keys().forEach { chats[it] = Chatroom(it, json.getString(it)) }
     }
 
     fun joinChat(id: String) {
@@ -79,7 +83,7 @@ class UserSession private constructor() {
         }
     }
 
-    fun refreshChatlist() {
+    suspend fun refreshChatlist() {
         this.loadChatRooms()
     }
 

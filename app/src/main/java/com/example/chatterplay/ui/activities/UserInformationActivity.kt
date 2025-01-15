@@ -1,6 +1,5 @@
 package com.example.chatterplay.ui.activities
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -104,15 +103,15 @@ class UserInformationActivity : AppActivity() {
     @Composable
     private fun UserData() {
         val data by remember { this.data }
+        var formattedDate = "N/A"
 
-        Log.i("DEBUG", data.joined)
-        // Format date
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-        val outputFormatter = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
-        outputFormatter.timeZone = TimeZone.getDefault()
-        val formattedDate = outputFormatter.format(sdf.parse(data.joined)!!)
-
+        if(data.joined.isNotEmpty()) {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
+            sdf.timeZone = TimeZone.getTimeZone("UTC")
+            val outputFormatter = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
+            outputFormatter.timeZone = TimeZone.getDefault()
+            formattedDate = outputFormatter.format(sdf.parse(data.joined)!!)
+        }
 
         val tableData = linkedMapOf(
             "Vorname"     to data.firstName,

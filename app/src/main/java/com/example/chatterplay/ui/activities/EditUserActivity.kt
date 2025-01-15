@@ -1,6 +1,5 @@
-package com.example.chatterplay.ui.activities.games
+package com.example.chatterplay.ui.activities
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,7 +22,6 @@ import com.example.chatterplay.UserSession
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.communication.UserData
 import com.example.chatterplay.communication.UserUpdate
-import com.example.chatterplay.ui.activities.AppActivity
 import com.example.chatterplay.ui.components.buttons.CpButtons
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -31,17 +30,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class EditUserActivity : AppActivity() {
+    private var data: MutableState<UserData> = mutableStateOf(UserData("", "", "", "", ""))
 
     @OptIn(ExperimentalLayoutApi::class, DelicateCoroutinesApi::class)
     @Composable
     override fun Render() {
-        val data: UserData
         runBlocking {
             val req = async { RestService.getInstance().getUser(UserSession.getInstance().user!!.id) }
-            data = req.await()
-
-            Log.i("DEBUG", data.joined)
+            data.value = req.await()
         }
+
+        var firstNameInput by remember { mutableStateOf(data.value.firstName) }
+        var lastNameInput by remember { mutableStateOf(data.value.lastName) }
+        var originInput by remember { mutableStateOf(data.value.origin) }
 
         Box(modifier = Modifier.fillMaxSize()) {
             CpButtons.CpGoBackButton(
@@ -55,10 +56,6 @@ class EditUserActivity : AppActivity() {
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            var firstNameInput by remember { mutableStateOf(data.firstName) }
-            var lastNameInput by remember { mutableStateOf(data.lastName) }
-            var originInput by remember { mutableStateOf(data.origin) }
-
             FlowColumn(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
