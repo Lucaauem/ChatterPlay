@@ -121,13 +121,13 @@ class UserInformationActivity : AppActivity() {
         )
         val keys: Array<String> = tableData.keys.toTypedArray()
 
-        LazyColumn(Modifier.padding(0.dp).fillMaxWidth(0.625f)) {
+        LazyColumn(Modifier.padding(0.dp).fillMaxWidth(0.75f)) {
             items(tableData.size) { index ->
                 Row(Modifier.fillMaxWidth()) {
                     TableCell(
                         text = keys[index],
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.fillMaxWidth(0.4f)
+                        modifier = Modifier.fillMaxWidth(0.45f)
                     )
                     TableCell(
                         text = tableData[keys[index]]!!.toString(),
