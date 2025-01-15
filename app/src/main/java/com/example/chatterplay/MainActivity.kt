@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     companion object {
-        const val APP_VERSION = "0.90c"
+        const val APP_VERSION = "0.95a"
     }
     override fun onStart() {
         super.onStart()

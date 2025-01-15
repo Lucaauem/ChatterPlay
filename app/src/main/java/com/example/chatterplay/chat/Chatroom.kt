@@ -1,13 +1,17 @@
 package com.example.chatterplay.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -30,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -78,12 +83,16 @@ class Chatroom(id: String, name: String) {
     fun Render() {
         val messages by remember { this.messages }
 
-        Column {
-            StatusBar(name)
-            Box(modifier = Modifier.weight(1f)) {
-                RenderMessages(messages)
+        KeyboardAware {
+
+
+            Column {
+                StatusBar(name)
+                Box(modifier = Modifier.weight(1f)) {
+                    RenderMessages(messages)
+                }
+                MessageSendInput()
             }
-            MessageSendInput()
         }
     }
 
@@ -96,9 +105,19 @@ class Chatroom(id: String, name: String) {
     }
 
     @Composable
+    fun KeyboardAware(
+        content: @Composable () -> Unit
+    ) {
+        Box(modifier = Modifier.imePadding()) {
+            content()
+        }
+    }
+
+    @Composable
     private fun RenderMessages(messages: List<ChatMessage>) {
         val id = UserSession.getInstance().user!!.id
         var previousId = ""
+        val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
 
         val gridState = rememberLazyGridState()
         val coroutineScope = rememberCoroutineScope()
@@ -127,7 +146,16 @@ class Chatroom(id: String, name: String) {
                 gridState.scrollToItem(messages.lastIndex)
             }
         }
+
+        // Scroll down when opening keyboard
+        LaunchedEffect(key1 = keyboardHeight) {
+            coroutineScope.launch {
+                gridState.scrollBy(keyboardHeight.toFloat())
+            }
+        }
+
     }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

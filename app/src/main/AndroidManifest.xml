@@ -27,7 +27,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.chat.ChatlistActivity" />
-        <activity android:name=".ui.activities.chat.ChatActivity" />
+        <activity
+            android:name=".ui.activities.chat.ChatActivity"
+            android:windowSoftInputMode="adjustResize"
+        />
         <activity android:name=".ui.activities.chat.ChatCreationActivity" />
         <activity android:name=".ui.activities.chat.ChatJoinActivity" />
         <activity android:name=".ui.activities.LoginActivity" />
