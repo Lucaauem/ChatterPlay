@@ -6,6 +6,7 @@ import org.restlet.Restlet;
 import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.restlet.service.LogService;
+import server.database.DatabaseHandler;
 import server.ressources.*;
 
 public class RestServer extends Application {
@@ -30,11 +31,42 @@ public class RestServer extends Application {
         component.setLogService(new LogService(false));
         component.start();
 
+        System.out.println("===============================================");
+        logStartup("STARTED CHATTERPLAY BACKEND ON PORT " + REST_PORT);
+
+        // Test db connection
+        boolean canConnectToDatabse = DatabaseHandler.getInstance().testConnection();
+        logStartup(canConnectToDatabse ? "CONNECTED TO DATABSE" : "COULD NOT CONNECT TO DATABSE", !canConnectToDatabse);
+
+        // Start socket port
         Receiver receiver = new Receiver();
         receiver.start();
+        RestServer.logStartup("RECEIVER THREAD STARTED ON PORT " + RestServer.SOCKET_PORT);
+
+        logStartup("BACKEND OPERATIONAL");
+        System.out.println("===============================================");
     }
 
     public static void log(String message) {
         System.out.println(">>>>> " + message);
+    }
+
+    public static void logStartup(String message) {
+        logStartup(message, false);
+    }
+
+    public static void logStartup(String message, int indentatiosn) {
+        System.out.print(new String(new char[indentatiosn]).replace("\0", "= "));
+        logStartup(message);
+    }
+
+    public static void logStartup(String message, boolean isError) {
+        if(isError) {
+            System.err.println("= > " + message);
+            System.err.println("ABORT STARTUP");
+            System.exit(1);
+            return;
+        }
+        System.out.println("= > " + message);
     }
 }

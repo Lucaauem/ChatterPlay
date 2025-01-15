@@ -4,6 +4,8 @@ import server.RestServer;
 import server.chatroom.Chatroom;
 import server.client.Client;
 import server.message.Message;
+
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -11,21 +13,55 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class DatabaseHandler {
-    private static DatabaseHandler instance = null;
+    private static final String ENV_FILE_PATH = "../src/main/res/db.env";
 
-    private DatabaseHandler() {}
+    private static DatabaseHandler instance = null;
+    private String username;
+    private String password;
+    private String url;
+
+    private DatabaseHandler() { this.readCredentials(); }
 
     public Connection connect() {
-        String url = "jdbc:mysql://localhost:3306/chatterplay";
-        String username = "db_chatterPlay";
-        String password = "chatterPlay24!";
-
         try {
-            return DriverManager.getConnection(url, username, password);
+            return DriverManager.getConnection(this.url, this.username, this.password);
         } catch (SQLException e) {
-            RestServer.log("Could not connect to db");
             return null;
         }
+    }
+
+    private void readCredentials() {
+        RestServer.logStartup("READING DATABASE CREDENTIALS");
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("db.env")) {
+            assert input != null;
+            BufferedReader br = new BufferedReader(new InputStreamReader(input));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("=");
+                switch (parts[0]) {
+                    case "USERNAME" -> {
+                        this.username = parts[1];
+                        RestServer.logStartup("USERNAME: " + this.username, 1);
+                    }
+                    case "PASSWORD" -> {
+                        this.password = parts[1];
+                        RestServer.logStartup("PASSWORD: " + this.password, 1);
+                    }
+                    case "URL" -> {
+                        this.url = parts[1];
+                        RestServer.logStartup("URL: " + this.url, 1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            RestServer.logStartup("COULD NOT READ DB CREDENTIALS", true);
+        }
+    }
+
+    public boolean testConnection() {
+        return this.connect() != null;
     }
 
     public static DatabaseHandler getInstance() {
