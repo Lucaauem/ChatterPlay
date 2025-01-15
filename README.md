@@ -4,7 +4,7 @@
 ***
 1. Setup Database
 
-   1.1 Use `docs/database.sql` to initialize the database
+   1.1 Use `docs/chatterplay.sql` to initialize the database
 
    1.2 Enter the database credentials in `backend/src/main/resources/db.env`
 
