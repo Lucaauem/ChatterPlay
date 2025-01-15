@@ -75,6 +75,8 @@ public class UserRessource extends ServerResource {
     @Delete
     public void logout() {
         String clientId = getQuery().getValues("id");
-        ClientManager.getInstance().getClient(clientId).logout();
+        if(ClientManager.getInstance().getClient(clientId).isLoggedIn()) {
+            ClientManager.getInstance().getClient(clientId).logout();
+        }
     }
 }

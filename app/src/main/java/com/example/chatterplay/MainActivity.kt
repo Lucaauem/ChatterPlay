@@ -57,11 +57,9 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        if(UserSession.getInstance().isLoggedIn()) {
-            runBlocking {
-                val req = async { RestService.getInstance().logout() }
-                req.await()
-            }
+        runBlocking {
+            val req = async { RestService.getInstance().logout() }
+            req.await()
         }
     }
 
