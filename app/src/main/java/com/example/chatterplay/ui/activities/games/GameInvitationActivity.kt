@@ -81,7 +81,7 @@ class GameInvitationActivity : AppActivity() {
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                CpBigButton(text = "Gegen Bot spielen", onClick = {startOfflineGame()})
+                CpMediumButton(text = "Offline spielen", onClick = {startOfflineGame()})
             }
         }
     }
