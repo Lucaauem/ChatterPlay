@@ -48,6 +48,12 @@ public class Client {
         RestServer.log("Client logged in with id: " + this.id);
     }
 
+    public void setOutputStream(DataOutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
+    public DataOutputStream getOutputStream() { return this.outputStream; }
+
     public boolean isLoggedIn() {
         return this.outputStream != null;
     }
@@ -58,6 +64,7 @@ public class Client {
                 this.outputStream.writeUTF(content.toString());
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("Could not send message to client with id: " + this.id);
         }
     }

@@ -1,5 +1,6 @@
 package server.client;
 
+import java.io.DataOutputStream;
 import java.util.HashMap;
 import server.RestServer;
 import server.database.DatabaseHandler;
@@ -36,6 +37,11 @@ public class ClientManager {
     }
 
     public void updateClient(Client client) {
+        // Get old socket
+        DataOutputStream out = this.getClient(client.getId()).getOutputStream();
+
+        // Set new user
+        client.setOutputStream(out);
         this.clients.put(client.getId(), client);
         DatabaseHandler.getInstance().updateClient(client);
     }

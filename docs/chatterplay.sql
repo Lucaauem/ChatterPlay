@@ -56,8 +56,8 @@ CREATE TABLE `chat_member` (
 --
 
 INSERT INTO `chat_member` (`id`, `chat_id`, `user_id`) VALUES
-('4266c0', '3434c6', '000000'),
-('94fa4e', '3434c6', '000001');
+('4266c0', '3434c6', '000001'),
+('94fa4e', '3434c6', '000002');
 
 -- --------------------------------------------------------
 
@@ -78,8 +78,8 @@ CREATE TABLE `messages` (
 --
 
 INSERT INTO `messages` (`id`, `chat_id`, `sender_id`, `content`, `timestamp`) VALUES
-('070fa2', '3434c6', '000000', 'Hallo!', '2025-01-15 14:56:45'),
-('1e5caa', '3434c6', '000001', 'Hi!', '2025-01-15 14:57:00');
+('070fa2', '3434c6', '000001', 'Hallo!', '2025-01-15 14:56:45'),
+('1e5caa', '3434c6', '000002', 'Hi!', '2025-01-15 14:57:00');
 
 -- --------------------------------------------------------
 
@@ -100,8 +100,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `first_name`, `last_name`, `origin`, `joined`) VALUES
-('000000', 'Luca', 'Außem', 'Düren', '2024-11-01'),
-('000001', 'Viktor', 'Veselinov', 'Aachen', '2025-01-01');
+('000001', 'Luca', 'Außem', 'Düren', '2024-11-01'),
+('000002', 'Viktor', 'Veselinov', 'Aachen', '2025-01-01');
 
 --
 -- Indexes for dumped tables

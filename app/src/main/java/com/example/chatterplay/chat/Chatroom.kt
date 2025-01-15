@@ -84,8 +84,6 @@ class Chatroom(id: String, name: String) {
         val messages by remember { this.messages }
 
         KeyboardAware {
-
-
             Column {
                 StatusBar(name)
                 Box(modifier = Modifier.weight(1f)) {
