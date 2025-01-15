@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.activities.AppActivity
+import com.example.chatterplay.ui.components.buttons.CpButtons
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -53,6 +55,12 @@ class ChatJoinActivity : AppActivity() {
 
         fun validate(status : Boolean) {
             chatroomFound = status
+        }
+
+        Row {
+            CpButtons.CpGoBackButton(
+                activity = this@ChatJoinActivity,
+                modifier = Modifier.padding(end = 10.dp, bottom = 10.dp, top = 10.dp))
         }
 
         FlowColumn(

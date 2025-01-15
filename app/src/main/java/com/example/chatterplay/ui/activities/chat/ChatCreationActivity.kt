@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.chatterplay.communication.RestService
 import com.example.chatterplay.ui.activities.AppActivity
+import com.example.chatterplay.ui.components.buttons.CpButtons
 import com.example.chatterplay.ui.components.buttons.CpButtons.Companion.CpMediumButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -31,6 +34,12 @@ class ChatCreationActivity : AppActivity() {
     @Composable
     override fun Render() {
         var textInput by remember { mutableStateOf("") }
+
+        Row {
+            CpButtons.CpGoBackButton(
+                activity = this@ChatCreationActivity,
+                modifier = Modifier.padding(end = 10.dp, bottom = 10.dp, top = 10.dp))
+        }
 
         FlowColumn(
             horizontalArrangement = Arrangement.Center,
